@@ -11,5 +11,8 @@
     "dist/bower/",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "babylonjs": "^2.4.1"
+  }
 }

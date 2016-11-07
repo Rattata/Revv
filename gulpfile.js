@@ -11,6 +11,7 @@ fs = require('fs');
 
 var paths = {
     "app" : {
+        "res": "./res/",
          "client": "./dist/app/",
          "server": "./dist/srv/"
     },
@@ -28,8 +29,16 @@ var paths = {
     }
 }
 
-gulp.task('default', ['build:client', 'build:server', 'build:static'], function(){
+var MODES = {
+    "DEV": {},
+    "TST": {},
+    "PRD" : {}
+};
 
+var MODE = MODES.DEV;
+
+gulp.task('default', ['build:client', 'build:server', 'build:static'], function(){
+    MODE = MODES.DEV
 })
 
 gulp.task('dev', function(){
@@ -37,7 +46,7 @@ gulp.task('dev', function(){
 })
 
 gulp.task('build:core', function(){
-    gulp.src(paths.core.src + '**/*.*')
+    gulp.src([paths.core.src + '*.*',paths.core.src + '**/*.*'])
     .pipe(sourcemap.init())
     .pipe(babel())
     .pipe(concat("core.js"))
@@ -81,7 +90,7 @@ gulp.task('watch', ['watch:res', 'watch:core',  'watch:server', 'watch:client'],
 })
 
 gulp.task('watch:res', function(){
-    gulp.watch('./res/*.*', ['build:static'])
+    gulp.watch([paths.app.res + '*.*', paths.core.dist + '*.*', paths.client.dist + '*.*', paths.server.dist + '*.*' ], ['build:static'])
 })
 
 gulp.task('watch:core', function(){

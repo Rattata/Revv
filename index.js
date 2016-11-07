@@ -1,5 +1,6 @@
-var express = require('express');
-var app = express();
+var express = require('express'),
+app = express(),
+core = require('./dist/srv/core.js');
 
 app.use(express.static('dist/app/'))
 
