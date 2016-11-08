@@ -1,3 +1,3 @@
-import {Hex, Map} from "../../core/src/Core"
-import Tile from "./Tile"
-module.exports = {Hex, Map, Tile}
+import {Tile} from "./Tile"
+module.exports = Tile
+console.log(Tile)

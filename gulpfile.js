@@ -15,6 +15,7 @@ var gulp = require('gulp'),
 
 var paths = {
     "webpackconfig": "./webpack.config.js",
+    "dist" : "./dist",
     "app": {
         "res": "./res/",
         "client": "./dist/app/",
@@ -170,6 +171,18 @@ gulp.task('buildserver:server', ['build:server'], function(callback) {
         if (err) throw new gutil.PluginError('webpack-dev-server', err);
         gutil.log('[webpack-dev-server]', 'http://localhost:8082/webpack-dev-server/index.html');
     });
+})
+
+gulp.task('clean', function(bc){
+    function cb(){}
+    rimraf(paths.dist, cb)
+    rimraf("."+paths.client.dist,cb)
+    rimraf("."+paths.server.dist,cb)
+    rimraf("."+paths.core.dist,cb)
+    rimraf("."+paths.server.res,cb)
+    rimraf("."+paths.client.res,cb)
+    bc()
+
 })
 
 gulp.task('build:static', function(callback) {
