@@ -21,41 +21,16 @@ var paths = {
         "client": "./dist/app/",
         "server": "./dist/srv/"
     },
-    "core": {
-        "src": "/modules/core/src/",
-        "dist": "/modules/core/dist/",
-        "res": "/modules/core/res/"
-    },
     "client": {
-        "src": "/modules/client/src/",
+        "src": "/modules/client/",
         "dist": "/modules/client/dist/",
         "res": "/modules/client/res/"
     },
     "server": {
-        "src": "/modules/server/src/",
+        "src": "/modules/server/",
         "dist": "/modules/server/dist/",
         "res": "/modules/server/res/"
     }
-}
-
-function wpCfgCore() {
-    var myConfig = Object.create(require(paths.webpackconfig));
-    myConfig.plugins = [
-        // new webpack.optimize.DedupePlugin(),
-        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
-    ]
-    myConfig.devtool = 'source-map'
-    myConfig.debug = true;
-    myConfig["entry"] = __dirname + paths.core.src + "Core"
-    myConfig["output"] = {
-        "path": __dirname + paths.core.dist,
-        "publicPath": __dirname + paths.core.dist,
-        "library": "Core",
-        "libraryTarget": "umd",
-        "filename": "Core.js",
-        "sourceMapFilename": "Core.map.js"
-    }
-    return myConfig
 }
 
 function wpCfgClient() {

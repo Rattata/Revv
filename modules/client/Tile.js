@@ -1,4 +1,4 @@
-import Hex from "../../core/src/Core"
+import Hex from "../core/Core"
 module.exports = class Tile{
     constructor(){
         
