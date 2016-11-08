@@ -1,5 +1,5 @@
-import 'Hex'
-module.exports =class {
+import * as Hex from './Hex'
+module.exports = class Map {
      constructor(X, Y) {
         var borderX = X + 2
         var borderY = Y + 2
