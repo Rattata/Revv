@@ -1,4 +1,4 @@
-module.exports = class Hex {
+module.exports = class {
     constructor(Q, R) {
         this._H = 1
         this._Q = Q

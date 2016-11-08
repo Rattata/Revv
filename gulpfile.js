@@ -1,13 +1,15 @@
 var gulp = require('gulp'),
 changed = require('gulp-changed'),
 webpack = require('gulp-webpack'),
+gutil = require('gulp-util'),
 concat = require('gulp-concat'),
 babel = require('gulp-babel'),
 sourcemap = require('gulp-sourcemaps'),
 uglify = require('gulp-uglify'),
 _ = require('lodash'),
 rimraf = require('rimraf'),
-fs = require('fs');
+fs = require('fs'),
+path = require('path');
 
 var paths = {
     "app" : {
@@ -46,7 +48,7 @@ gulp.task('dev', function(){
 })
 
 gulp.task('build:core', function(){
-    gulp.src([paths.core.src + '*.*',paths.core.src + '**/*.*'])
+    gulp.src([paths.core.src + 'Map.js'])
     .pipe(sourcemap.init())
     .pipe(babel())
     .pipe(concat("core.js"))
@@ -56,11 +58,12 @@ gulp.task('build:core', function(){
 })
 
 gulp.task('build:client', ['build:core'], function(){
+   
     gulp.src(paths.client.src + '**/*.*')
     .pipe(sourcemap.init())
     .pipe(babel())
     .pipe(concat("client.js"))
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(sourcemap.write("."))
     .pipe(gulp.dest(paths.client.dist))
 })
