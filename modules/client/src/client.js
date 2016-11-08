@@ -1,3 +1,6 @@
 import {Tile} from "./Tile"
-module.exports = Tile
-console.log(Tile)
+var start = function (canvas){
+    console.log(canvas)
+    console.log(BABYLON)
+}
+module.exports = {Tile,start}
