@@ -16,35 +16,41 @@ var gulp = require('gulp'),
 var paths = {
     "webpackconfig": "./webpack.config.js",
     "app": {
-        "res": "/res/",
-        "client": "/dist/app/",
-        "server": "/dist/srv/"
+        "res": "./res/",
+        "client": "./dist/app/",
+        "server": "./dist/srv/"
     },
     "core": {
         "src": "/modules/core/src/",
-        "dist": "/modules/core/dist/"
+        "dist": "/modules/core/dist/",
+        "res": "/modules/core/res/"
     },
     "client": {
         "src": "/modules/client/src/",
-        "dist": "/modules/client/dist/"
+        "dist": "/modules/client/dist/",
+        "res": "/modules/client/res/"
     },
     "server": {
         "src": "/modules/server/src/",
-        "dist": "/modules/server/dist/"
+        "dist": "/modules/server/dist/",
+        "res": "/modules/server/res/"
     }
 }
 
 function wpCfgCore() {
     var myConfig = Object.create(require(paths.webpackconfig));
     myConfig.plugins = [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({"mangle": false})
+        // new webpack.optimize.DedupePlugin(),
+        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
     ]
     myConfig.devtool = 'source-map'
     myConfig.debug = true;
     myConfig["entry"] = __dirname + paths.core.src + "Core"
     myConfig["output"] = {
         "path": __dirname + paths.core.dist,
+        "publicPath": __dirname + paths.core.dist,
+        "library": "Core",
+        "libraryTarget": "umd",
         "filename": "Core.js",
         "sourceMapFilename": "Core.map.js"
     }
@@ -54,16 +60,19 @@ function wpCfgCore() {
 function wpCfgClient() {
     var myConfig = Object.create(require(paths.webpackconfig));
     myConfig.plugins = [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({"mangle": false})
+        // new webpack.optimize.DedupePlugin(),
+        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
     ]
     myConfig.devtool = 'source-map'
     myConfig.debug = true
-    myConfig["entry"] = __dirname + paths.client.src + "client"
+    myConfig["entry"] = __dirname + paths.client.src + "Client"
     myConfig["output"] = {
         "path": __dirname + paths.client.dist,
-        "filename": "client.js",
-        "sourceMapFilename": "client.map.js"
+        "publicPath": __dirname + paths.client.dist,
+        "library": "Client",
+        "libraryTarget": "umd",
+        "filename": "Client.js",
+        "sourceMapFilename": "Client.map.js"
     }
     return myConfig
 }
@@ -71,31 +80,34 @@ function wpCfgClient() {
 function wpCfgServer() {
     var myConfig = Object.create(require(paths.webpackconfig))
     myConfig.plugins = [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({"mangle": false})
+        // new webpack.optimize.DedupePlugin(),
+        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
     ]
     myConfig.devtool = 'source-map'
     myConfig.debug = true
-    myConfig["entry"] = __dirname + paths.server.src + "server"
+    myConfig["entry"] = __dirname + paths.server.src + "Server"
     myConfig["output"] = {
         "path": __dirname + paths.server.dist,
-        "filename": "server.js",
-        "sourceMapFilename": "server.map.js"
+        "publicPath": __dirname + paths.server.dist,
+        "library": "Server",
+        "libraryTarget": "umd",
+        "filename": "Server.js",
+        "sourceMapFilename": "Server.map.js"
     }
     return myConfig
 }
 
 
-gulp.task('default', ['build:client', 'build:server', 'build:static'], function () {
+gulp.task('default', ['build:client', 'build:server', 'build:static', 'express'], function() {
 
 })
 
-gulp.task('dev', function () {
+gulp.task('express', function() {
 
 })
 
-gulp.task('build:core', function () {
-    webpack(wpCfgCore(), function (err, stats) {
+gulp.task('build:core', function() {
+    webpack(wpCfgCore(), function(err, stats) {
         if (err) throw new gutil.PluginError('webpack', err);
         gutil.log('[webpack]', stats.toString({
             colors: true,
@@ -104,20 +116,20 @@ gulp.task('build:core', function () {
     });
 });
 
-gulp.task('buildserver:core', ['build:core'], function (callback) {
+gulp.task('buildserver:core', ['build:core'], function(callback) {
     new webpackDevServer(webpack(wpCfgCore()), {
         stats: {
             colors: true
         },
         hot: true
-    }).listen(8080, 'localhost', function (err) {
+    }).listen(8080, 'localhost', function(err) {
         if (err) throw new gutil.PluginError('webpack-dev-server', err);
         gutil.log('[webpack-dev-server]', 'http://localhost:8080/webpack-dev-server/index.html');
     });
 });
 
-gulp.task('build:client', function () {
-    webpack(wpCfgClient(), function (err, stats) {
+gulp.task('build:client', function() {
+    webpack(wpCfgClient(), function(err, stats) {
         if (err) throw new gutil.PluginError('webpack', err);
         gutil.log('[webpack]', stats.toString({
             colors: true,
@@ -126,20 +138,20 @@ gulp.task('build:client', function () {
     });
 })
 
-gulp.task('buildserver:client', ['build:client'], function (callback) {
+gulp.task('buildserver:client', ['build:client'], function(callback) {
     new webpackDevServer(webpack(wpCfgClient()), {
         stats: {
             colors: true
         },
         hot: true
-    }).listen(8081, 'localhost', function (err) {
+    }).listen(8081, 'localhost', function(err) {
         if (err) throw new gutil.PluginError('webpack-dev-server', err);
         gutil.log('[webpack-dev-server]', 'http://localhost:8081/webpack-dev-server/index.html');
     });
 })
 
-gulp.task('build:server', function () {
-    webpack(wpCfgServer(), function (err, stats) {
+gulp.task('build:server', function() {
+    webpack(wpCfgServer(), function(err, stats) {
         if (err) throw new gutil.PluginError('webpack', err);
         gutil.log('[webpack]', stats.toString({
             colors: true,
@@ -148,36 +160,35 @@ gulp.task('build:server', function () {
     });
 })
 
-gulp.task('buildserver:server', ['build:server'], function (callback) {
+gulp.task('buildserver:server', ['build:server'], function(callback) {
     new webpackDevServer(webpack(wpCfgServer()), {
         stats: {
             colors: true
         },
         hot: true
-    }).listen(8082, 'localhost', function (err) {
+    }).listen(8082, 'localhost', function(err) {
         if (err) throw new gutil.PluginError('webpack-dev-server', err);
         gutil.log('[webpack-dev-server]', 'http://localhost:8082/webpack-dev-server/index.html');
     });
 })
 
-
-
-gulp.task('build:static', ['build:server', 'build:client'], function () {
-    gulp.src('./res/*.*').pipe(changed(paths.app.client)).pipe(gulp.dest(paths.app.client))
-    gulp.src(paths.client.dist + '*.*').pipe(changed(paths.app.client)).pipe(gulp.dest(paths.app.client))
-    gulp.src(paths.server.dist + '*.*').pipe(changed(paths.app.server)).pipe(gulp.dest(paths.app.server))
-    gulp.src(paths.core.dist + '*.*').pipe(changed(paths.app.server)).pipe(gulp.dest(paths.app.server))
-    gulp.src(paths.core.dist + '*.*').pipe(changed(paths.app.client)).pipe(gulp.dest(paths.app.client))
-    gulp.src(paths.core.dist + '*.*').pipe(changed(paths.client.res)).pipe(gulp.dest(paths.client.res))
-    gulp.src(paths.core.dist + '*.*').pipe(changed(paths.server.res)).pipe(gulp.dest(paths.server.res))
+gulp.task('build:static', function(callback) {
+    gulp.src(paths.app.res + '*').pipe(changed(paths.app.client)).pipe(gulp.dest(paths.app.client))
+    gulp.src("." + paths.client.dist + '*').pipe(changed("./" + paths.app.client)).pipe(gulp.dest("./" + paths.app.client))
+    gulp.src("." + paths.server.dist + '*').pipe(changed("./" + paths.app.server)).pipe(gulp.dest("./" + paths.app.server))
+    gulp.src("." + paths.core.dist + '*').pipe(changed("./" + paths.app.client)).pipe(gulp.dest("./" + paths.app.client))
+    gulp.src("." + paths.core.dist + '*').pipe(changed("./" + paths.app.server)).pipe(gulp.dest("./" + paths.app.server))
+    gulp.src("." + paths.core.dist + '*').pipe(changed("./" + paths.client.res)).pipe(gulp.dest("./" + paths.client.res))
+    gulp.src("." + paths.core.dist + '*').pipe(changed("./" + paths.server.res)).pipe(gulp.dest("./" + paths.server.res))
+    callback()
 })
 
+gulp.task('watch:static', ['build:static'], function() {
+    gulp.watch([paths.app.res + '*.*', "./" + paths.core.dist + '*.*', "./" + paths.client.dist + '*.*', "./" + paths.server.dist + '*.*'], ['build:static'])
+})
 
 //watches
-gulp.task('watch', ['buildserver:core', 'buildserver:client', 'buildserver:server', 'watch:res'], function (done) {
+gulp.task('watch', ['buildserver:core', 'buildserver:client', 'buildserver:server', 'watch:static'], function(done) {
     done()
 })
 
-gulp.task('watch:res', function () {
-    gulp.watch([paths.app.res + '*.*', paths.core.dist + '*.*', paths.client.dist + '*.*', paths.server.dist + '*.*'], ['build:static'])
-})

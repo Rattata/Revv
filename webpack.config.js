@@ -3,9 +3,7 @@ module.exports = {
         "loaders": [
             {
                 test: /\.js$/,
-                loaders: [
-                    'babel-loader'
-                ],
+                loader: 'babel'
             },
         ],
     },
