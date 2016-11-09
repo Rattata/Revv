@@ -36,8 +36,8 @@ var paths = {
 function wpCfgClient() {
     var myConfig = Object.create(require(paths.webpackconfig));
     myConfig.plugins = [
-        // new webpack.optimize.DedupePlugin(),
-        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin({"mangle": false})
     ]
     myConfig.devtool = 'source-map'
     myConfig.debug = true
@@ -56,8 +56,8 @@ function wpCfgClient() {
 function wpCfgServer() {
     var myConfig = Object.create(require(paths.webpackconfig))
     myConfig.plugins = [
-        // new webpack.optimize.DedupePlugin(),
-        // new webpack.optimize.UglifyJsPlugin({"mangle": false})
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin({"mangle": false})
     ]
     myConfig.devtool = 'source-map'
     myConfig.debug = true

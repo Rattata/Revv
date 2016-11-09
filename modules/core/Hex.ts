@@ -1,5 +1,9 @@
-module.exports = class Hex {
-    constructor(Q, R) {
+export class Hex {
+    _H : number;
+    _Q : number;
+    _R : number;
+    _S : number;
+    constructor(Q : number, R : number, _S : number) {
         this._H = 1
         this._Q = Q
         this._R = R
@@ -28,6 +32,6 @@ module.exports = class Hex {
         return new Number(Math.abs(a._Q) + Math.abs(a._R) + Math.abs(a._S) / 2)
     }
     hex_distance(a, b) {
-        return hex_length(hex_subtract(a, b))
+        return this.hex_length(this.hex_subtract(a, b))
     }
 }

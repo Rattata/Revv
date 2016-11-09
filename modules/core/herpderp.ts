@@ -1,3 +1,3 @@
-module.exports = function(){
+export function id(){
     console.log("herpderp")
 }
