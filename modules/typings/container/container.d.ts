@@ -1,0 +1,30 @@
+import interfaces from "../interfaces/interfaces";
+declare class Container implements interfaces.Container {
+    guid: string;
+    readonly options: interfaces.ContainerOptions;
+    private _middleware;
+    private _bindingDictionary;
+    private _snapshots;
+    private _parentContainer;
+    static merge(container1: interfaces.Container, container2: interfaces.Container): interfaces.Container;
+    constructor(containerOptions?: interfaces.ContainerOptions);
+    load(...modules: interfaces.ContainerModule[]): void;
+    unload(...modules: interfaces.ContainerModule[]): void;
+    bind<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>): interfaces.BindingToSyntax<T>;
+    unbind(serviceIdentifier: interfaces.ServiceIdentifier<any>): void;
+    unbindAll(): void;
+    isBound(serviceIdentifier: interfaces.ServiceIdentifier<any>): boolean;
+    snapshot(): void;
+    restore(): void;
+    parent: interfaces.Container;
+    applyMiddleware(...middlewares: interfaces.Middleware[]): void;
+    get<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>): T;
+    getTagged<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>, key: string, value: any): T;
+    getNamed<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>, named: string): T;
+    getAll<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>): T[];
+    getAllTagged<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>, key: string, value: any): T[];
+    getAllNamed<T>(serviceIdentifier: interfaces.ServiceIdentifier<T>, named: string): T[];
+    private _get<T>(isMultiInject, targetType, serviceIdentifier, key?, value?);
+    private _planAndResolve<T>();
+}
+export default Container;

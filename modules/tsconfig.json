@@ -1,6 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es6"
+    "typeRoots" : ["./typings/"],
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "reflect-metadata"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "modules":null
+  "modules": null
 }
