@@ -1,6 +1,6 @@
 import {Hex} from "../core/Core"
 export class Tile {
-    constructor(hex) {
+    constructor(hex : Hex) {
         
     }
 }

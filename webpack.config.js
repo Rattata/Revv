@@ -4,14 +4,11 @@ module.exports = {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     "module": {
+        "preLoaders": [
+           
+        ],
         "loaders": [
-            {
-                test: /\.js$/,
-                loader: 'babel'
-            },{
-                test: /\.tsx?$/,
-                "loader": 'ts-loader'
-            }
+            { test: /\.ts(x?)$/, loader: 'babel-loader!ts-loader' }
         ],
     },
     "devtool": "source-map"

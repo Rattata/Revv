@@ -26,6 +26,7 @@ export class Map {
             }
         }
     }
+
     getHexs() {
         var retHexes = new Array()
         for (var i = 0; i < this.map.length; i++) {
@@ -56,5 +57,13 @@ export class Map {
             printval = printval.concat("\n")
         }
         console.log(printval)
+    }
+
+    static Deserialize(array : Array<Hex>[][]){
+
+    }
+
+    static Serialize () : Array<Hex> {
+        return new Array<Hex>();
     }
 }
