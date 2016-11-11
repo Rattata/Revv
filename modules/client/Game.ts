@@ -24,7 +24,6 @@ export class Game {
         this.engine.runRenderLoop(() => {
             scene.render()
         })
-        
     }
     
     createMenu(engine : BABYLON.Engine): BABYLON.Scene {
@@ -33,10 +32,10 @@ export class Game {
         var connect = BABYLON.Mesh.CreatePlane("connect", 0.75, scene,false);
         connect.setAbsolutePosition(new BABYLON.Vector3(0,0,0))
         
-        var middle  = BABYLON.Mesh.CreatePlane("exit", 0.75, scene, false);
+        var middle  = BABYLON.Mesh.CreatePlane("exit", 0.75, scene, false)
         middle.setAbsolutePosition(new BABYLON.Vector3(0,1,0))
         
-        var end= BABYLON.Mesh.CreatePlane("end", 0.75, scene, false);
+        var end= BABYLON.Mesh.CreatePlane("end", 0.75, scene, false)
         end.setAbsolutePosition(new BABYLON.Vector3(0,2,0))
         
         camera.setTarget(new BABYLON.Vector3(0,1,0))
