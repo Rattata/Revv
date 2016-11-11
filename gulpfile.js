@@ -107,6 +107,7 @@ gulp.task('buildserver:server', ['build:server'], function(callback) {
 gulp.task('clean', function(bc){
     function cb(){}
     rimraf(paths.dist, cb)
+    rimraf("./node_modules", cb)
     rimraf("."+paths.client.dist,cb)
     rimraf("."+paths.server.dist,cb)
     rimraf("."+paths.core.dist,cb)
