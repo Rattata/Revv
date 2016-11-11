@@ -1,9 +1,0 @@
-export declare const NAMED_TAG: string;
-export declare const NAME_TAG: string;
-export declare const UNMANAGED_TAG: string;
-export declare const INJECT_TAG: string;
-export declare const MULTI_INJECT_TAG: string;
-export declare const TAGGED: string;
-export declare const TAGGED_PROP: string;
-export declare const PARAM_TYPES: string;
-export declare const DESIGN_PARAM_TYPES: string;

@@ -66,7 +66,7 @@ function wpCfgServer() {
         "path": paths.app.server,
         "publicPath": paths.app.server,
         "library": "Server",
-        "libraryTarget": "umd",
+        "libraryTarget": "commonjs",
         "filename": "Server.js",
         "sourceMapFilename": "Server.map.js"
     }

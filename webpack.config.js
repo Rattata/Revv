@@ -5,11 +5,18 @@ module.exports = {
     },
     "module": {
         "preLoaders": [
-           
+
         ],
         "loaders": [
             { test: /\.ts(x?)$/, loader: 'babel-loader!ts-loader' }
         ],
     },
-    "devtool": "source-map"
+    "devtool": "source-map",
+    "console": false,
+    "global": true,
+    "process": true,
+    "Buffer": true,
+    "__filename": "mock",
+    "__dirname": "mock",
+    "setImmediate": true
 }

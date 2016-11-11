@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "typeRoots" : ["./typings/"],
+    "typeRoots": [
+      "../typings/"
+    ],
     "target": "es6",
     "lib": [
       "es6",
@@ -14,5 +16,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "modules": null
+  "modules": null,
+  "files": [
+    "../typings/index.d.ts", "../typings/babylon.2.4.d.ts"
+  ]
 }
