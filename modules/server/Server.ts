@@ -1,15 +1,24 @@
-var express = require('express');
-  var app = express();
-  var websocket = require('express-ws');(app);
-websocket = websocket(app);
-app.use(express.static('dist/app/'))
+import * as express from 'express'
+var app = express()
+import * as ws from 'ws'
+import * as http from 'http'
+import * as url from 'url'
 
-app.ws('/echo', function (ws, req) {
-  ws.on('message', function (message) {
-    ws.send('OK')
-  })
+var WebSocketServer = ws.Server
+var wss = new WebSocketServer({ "server": http.createServer() })
+
+
+wss.on('connection', function connection(ws) {
+  var location = url.parse(ws.upgradeReq.url, true);
+
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
 });
 
-app.listen(3001, function () {
+app.use(express.static("../app"))
+app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })

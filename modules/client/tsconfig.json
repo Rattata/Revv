@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "../../node_modules/@types"
+    ],
+    "types": ["babylonjs","reflect-metadata"],
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "modules": null,
+  "files": [
+  ]
+}

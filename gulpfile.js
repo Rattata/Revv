@@ -14,7 +14,7 @@ var gulp = require('gulp'),
     path = require('path');
 
 var paths = {
-    "webpackconfig": "./webpack.config.js",
+    
     "dist" : "./dist",
     "app": {
         "res": "./res/",
@@ -22,11 +22,13 @@ var paths = {
         "server": "./dist/srv/"
     },
     "client": {
+        "wpconfig": "./webpack.client.js",
         "src": "/modules/client/",
         "dist": "/modules/client/dist/",
         "res": "/modules/client/res/"
     },
     "server": {
+        "wpconfig": "./webpack.server.js",
         "src": "/modules/server/",
         "dist": "/modules/server/dist/",
         "res": "/modules/server/res/"
@@ -34,42 +36,18 @@ var paths = {
 }
 
 function wpCfgClient() {
-    var myConfig = Object.create(require(paths.webpackconfig));
-    myConfig.plugins = [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({"mangle": true})
-    ]
-    myConfig.devtool = 'source-map'
-    myConfig.debug = true
+    var myConfig = Object.create(require(paths.client.wpconfig));
     myConfig["entry"] = __dirname + paths.client.src + "Client"
-    myConfig["output"] = {
-        "path": paths.app.client,
-        "publicPath": paths.app.client,
-        "library": "Client",
-        "libraryTarget": "umd",
-        "filename": "Client.js",
-        "sourceMapFilename": "Client.map.js"
-    }
+    myConfig["output"]["path"] = paths.app.client
+    myConfig["output"]["publicPath"] = paths.app.client 
     return myConfig
 }
 
 function wpCfgServer() {
-    var myConfig = Object.create(require(paths.webpackconfig))
-    myConfig.plugins = [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({"mangle": true})
-    ]
-    myConfig.devtool = 'source-map'
-    myConfig.debug = true
+    var myConfig = Object.create(require(paths.server.wpconfig))
     myConfig["entry"] = __dirname + paths.server.src + "Server"
-    myConfig["output"] = {
-        "path": paths.app.server,
-        "publicPath": paths.app.server,
-        "library": "Server",
-        "libraryTarget": "commonjs",
-        "filename": "Server.js",
-        "sourceMapFilename": "Server.map.js"
-    }
+    myConfig["output"]["path"] = paths.app.server
+    myConfig["output"]["publicPath"] = paths.app.server
     return myConfig
 }
 

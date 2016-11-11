@@ -5,5 +5,5 @@
     "exclude": [
         "node_modules"
     ],
-    "files" : ["typings/inversify.d.ts", "typings/babylon.2.4.d.ts"]
+    "files" : []
 }
