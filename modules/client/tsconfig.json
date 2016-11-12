@@ -1,20 +1,24 @@
 {
   "compilerOptions": {
+    "baseUrl": "../../",
     "typeRoots": [
-      "../../node_modules/@types"
+      "node_modules/@types",
+      "node_modules"
     ],
-    "types": ["babylonjs","reflect-metadata"],
+    "types": [ "babylonjs", "inversify"],
     "target": "es6",
     "lib": [
       "es6",
       "dom"
     ],
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "traceResolution" : true
   },
-  "modules": null,
-  "files": [
-  ]
+   "exclude": [
+    "!../../node_modules/@types"
+  ],
+  "modules": null
 }

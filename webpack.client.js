@@ -20,8 +20,8 @@ module.exports = {
         "filename": "Client.js",
         "sourceMapFilename": "Client.map.js"
     },
-    "externals": [nodeExternals()],
-    "target": "node",
+    //"externals": [nodeExternals()],
+    "target": "web",
     "devtool": "source-map",
     "console": false,
     "global": false,
