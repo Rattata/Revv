@@ -34,7 +34,8 @@ export class Game {
 
     createMenu(engine: BABYLON.Engine): BABYLON.Scene {
         var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(6, 2.3, -3.5), scene)
+        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(6, 2.25, -3), scene)
+        camera.setTarget(new BABYLON.Vector3(6, 2.5, 0))
         var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(6, 2.8, -20), scene);
         light.diffuse = new BABYLON.Color3(0.14, 0.14, 0.20);
         light.specular = new BABYLON.Color3(0.2, 0.2, 0.2);
@@ -48,10 +49,10 @@ export class Game {
                 var name;
                 var temp: BABYLON.Vector3
                 if (j % 2 === 1) {
-                    temp = new BABYLON.Vector3(0.75 + i * 1.5, j * 0.43, Math.floor(Math.random() * 7) / 10);
+                    temp = new BABYLON.Vector3(0.75 + i * 1.5, j * 0.43, Math.floor(Math.random() * 10) / 10);
                     name = "off"
                 } else {
-                    temp = new BABYLON.Vector3(i * 1.5, j * 0.43, Math.floor(Math.random() * 7) / 10);
+                    temp = new BABYLON.Vector3(i * 1.5, j * 0.43, Math.floor(Math.random() * 10) / 10);
                     name = "nor"
                 }
                 var clone = movable.clone(name + i + j);
@@ -78,12 +79,11 @@ export class Game {
                 element.position.y += 0.4 * delta
                 if (element.position.y > 4.5) {
                     element.position.y = underbar
-                    element.position.z = Math.floor(Math.random() * 7) / 10
+                    element.position.z = Math.floor(Math.random() * 10) / 10
                 }
             })
 
         })
-        camera.setTarget(new BABYLON.Vector3(6, 2.5, 0))
         return scene
     }
 }
