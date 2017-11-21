@@ -7,9 +7,14 @@ export class Game {
     quit = false
 
     constructor(canvas: any) {
+        //test websocket upgrade
+        var ws = new WebSocket('ws://localhost:3000/echo');
+        ws.onopen = function (event) {
+  ws.send("Here's some text that the server is urgently awaiting!"); 
+};
+        
         Game.canvas = canvas
         this.engine = new BABYLON.Engine(canvas, false,null, false)
-        
         Game.currentGame = this
         this.scene = this.createMenu(this.engine)
         this.switchScene(this.scene)
@@ -19,6 +24,8 @@ export class Game {
                 clearInterval(1)
             }
         }, 5000, 1)
+        
+        
     }
 
     switchScene(newScene: BABYLON.Scene) {
@@ -42,15 +49,7 @@ export class Game {
         var traingle = BABYLON.MeshBuilder.CreatePolyhedron("ship", { type: 0, size: 0.25 }, scene);
         traingle.setAbsolutePosition(new BABYLON.Vector3(6, 3, -1.1))
 
-        // var material = new BABYLON.StandardMaterial("name", scene)
-        // var trainglematerial = new BABYLON.StandardMaterial("trainglemat", scene)
-        // material.backFaceCulling = true;
-        // material.emissiveColor = new BABYLON.Color3(0.2, 0.2, 0.4)
-        // material.ambientColor = new BABYLON.Color3(0.4, 0.2, 0.2)
-        // traingle.material = trainglematerial;
-        // trainglematerial.backFaceCulling = true;
-        // trainglematerial.freeze();
-        // material.freeze();
+      
         traingle.scaling.x = 1.5
         traingle.rotation.z = Math.PI / 2
         traingle.rotation.x = Math.PI
@@ -86,20 +85,6 @@ export class Game {
                 }
             }
 
-            // var delta = clock.getDelta()
-            // underbar += 4 * delta
-            // underbar = underbar % 0.43
-            // array.forEach(element => {
-            //     element.translate(BABYLON.Axis.Y, delta, BABYLON.Space.WORLD);
-            //     // element.position.y += 1 * delta
-            //     // if (element.position.y > 4.5) {
-            //     //     element.position.y = underbar
-            //     //     element.position.z = Math.floor(Math.random() * 10) / 10
-            //     // }
-            // })
-            // // sway = (sway + delta) % 4
-            // // traingle.position.x = 6 + Math.sin(Math.PI / 2 * sway)
-            // // traingle.rotation.y = (Math.PI / 4) * Math.sin(Math.PI / 2 * sway)
         })
         return scene
     }

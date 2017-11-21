@@ -1,24 +1,20 @@
-import * as express from 'express'
-var app = express()
-import * as ws from 'ws'
-import * as http from 'http'
-import * as url from 'url'
-
-var WebSocketServer = ws.Server
-var wss = new WebSocketServer({ "server": http.createServer() })
-
-
-wss.on('connection', function connection(ws) {
-  var location = url.parse(ws.upgradeReq.url, true);
-
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+import express = require('express');
+var app = express();
+import expressUws = require('express-uws');
+var expressWs = expressUws(app);
+ 
+// app.use(function (req, res, next) {
+//   console.log('middleware');
+//   (req as any).testing = 'testing';
+//   return next();
+// });
+ 
+(app as any).ws('/echo', function(ws, req) {
+  ws.on('message', function(msg) {
+    
   });
-
-  ws.send('something');
 });
 
-app.use(express.static("../app"))
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+ 
+app.use('/',express.static("../app"));
+app.listen(3000);

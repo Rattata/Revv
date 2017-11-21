@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var nodeExternals = require('webpack-node-externals');
 module.exports = {
     "resolve": {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
@@ -15,11 +14,13 @@ module.exports = {
         ],
     },
     "output": {
-        "library": "Client",
+        "path":__dirname + "/dist/app/",
+         "library": "Client",
         "libraryTarget": "umd",
         "filename": "Client.js",
         "sourceMapFilename": "Client.map.js"
     },
+    "entry": __dirname + "/modules/client/Client",
     //"externals": [nodeExternals()],
     "target": "web",
     "devtool": "source-map",

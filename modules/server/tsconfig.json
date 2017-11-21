@@ -3,6 +3,7 @@
     "typeRoots": [
       "../../node_modules/@types"
     ],
+    "types": [ "inversify"],
     "target": "es6",
     "lib": [
       "es2015",

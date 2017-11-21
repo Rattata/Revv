@@ -8,18 +8,20 @@ module.exports = {
     "resolve": {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
-    "output": {
-        "library": "Server",
-        "libraryTarget": "commonjs",
-        "filename": "Server.js",
-        "sourceMapFilename": "Server.map.js"
-    },
     "module": {
         "loaders": [
             { test: /\.json$/, loader: 'json-loader' },
             { test: /\.ts(x?)$/, loader: 'babel-loader!ts-loader' }
         ],
     },
+    "output": {
+        "path": __dirname + "/dist/srv/",
+        "library": "Server",
+        "libraryTarget": "commonjs",
+        "filename": "Server.js",
+        "sourceMapFilename": "Server.map.js"
+    },
+    "entry": __dirname + "/modules/server/Server",
     "externals": [nodeExternals()],
     "target": "node",
     "devtool": "source-map",

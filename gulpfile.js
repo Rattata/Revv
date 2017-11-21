@@ -37,17 +37,11 @@ var paths = {
 
 function wpCfgClient() {
     var myConfig = Object.create(require(paths.client.wpconfig));
-    myConfig["entry"] = __dirname + paths.client.src + "Client"
-    myConfig["output"]["path"] = paths.app.client
-    myConfig["output"]["publicPath"] = paths.app.client 
     return myConfig
 }
 
 function wpCfgServer() {
     var myConfig = Object.create(require(paths.server.wpconfig))
-    myConfig["entry"] = __dirname + paths.server.src + "Server"
-    myConfig["output"]["path"] = paths.app.server
-    myConfig["output"]["publicPath"] = paths.app.server
     return myConfig
 }
 
