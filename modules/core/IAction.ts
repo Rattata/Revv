@@ -1,0 +1,5 @@
+interface IAction {
+    
+}
+
+export {IAction}

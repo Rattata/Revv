@@ -10,6 +10,6 @@ app.ws('/echo', function (ws, req) {
   })
 });
 
-app.listen(3001, function () {
+app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })

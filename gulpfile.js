@@ -18,8 +18,8 @@ var paths = {
     "dist" : "./dist",
     "app": {
         "res": "./res/",
-        "client": "./dist/app/",
-        "server": "./dist/srv/"
+        "client": "/dist/app/",
+        "server": "/dist/srv/"
     },
     "client": {
         "wpconfig": "./webpack.client.js",
@@ -68,6 +68,7 @@ gulp.task('build:client', function() {
             progress: true
         }));
     });
+    
 })
 
 gulp.task('buildserver:client', ['build:client'], function(callback) {

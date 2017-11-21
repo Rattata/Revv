@@ -1,7 +1,6 @@
 import { Tile } from "./Tile"
 import {Game } from "./Game"
 import "reflect-metadata"
-import './Container'
 import  * as inversify from 'inversify'
 import {ITest} from './ITest'
 

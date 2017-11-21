@@ -2,6 +2,11 @@
 -----
 Webpack TS ES6 
 
+## build
+-----
+npm install
+gulp
+
 # TODO
 ------
 1. ~~Basic build system~~
