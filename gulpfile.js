@@ -65,6 +65,18 @@ gulp.task('build:client', function() {
     
 })
 
+gulp.task('buildserver', function(){
+    new webpackDevServer(webpack([wpCfgClient(), wpCfgServer()]), {
+        stats: {
+            colors: true
+        },
+        hot: true
+    }).listen(8081, 'localhost', function(err) {
+        if (err) throw new gutil.PluginError('webpack-dev-server', err);
+        gutil.log('[webpack-dev-server]', 'http://localhost:8081/webpack-dev-server/index.html');
+    });
+})
+
 gulp.task('buildserver:client', ['build:client'], function(callback) {
     new webpackDevServer(webpack(wpCfgClient()), {
         stats: {

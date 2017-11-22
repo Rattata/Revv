@@ -1,9 +1,12 @@
 //IoC
 import {myContainer} from "./inversify.config";
 import { TYPES } from "./server.types";
-import { ActionHandler } from "./ActionHandler/ActionHandler";
+import { ActionRouter } from "./ActionHandler/ActionRouter";
 import { IActionHandler } from "./ActionHandler/IActionHandler";
 
+//Database
+import sqlite = require("sqlite3");
+var DB = new sqlite.Database(":memory:");
 
 //webserver
 import express = require('express');
@@ -20,7 +23,7 @@ var expressWs = expressUws(app);
 
 (app as any).ws('/echo', function(ws, req) {
   ws.on('message', function(msg) {
-    var handler = myContainer.get<IActionHandler>(TYPES.IActionHandler);
+    var handler = myContainer.get<ActionRouter>(TYPES.IActionHandler);
     
     handler.handle(msg);
   });

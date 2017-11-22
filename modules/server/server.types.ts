@@ -1,7 +1,8 @@
 // file types.ts
  
 const TYPES = {
-    IActionHandler: Symbol("IActionHandler")
+    IActionHandler: Symbol("IActionHandler"),
+    ActionRouter: Symbol("ActionRouter")
 };
  
 export { TYPES };

@@ -1,9 +1,12 @@
 import { Container } from "inversify";
 import { TYPES } from "./server.types";
-import { ActionHandler } from "./ActionHandler/ActionHandler";
+import { ActionRouter } from "./ActionHandler/ActionRouter";
 import { IActionHandler } from "./ActionHandler/IActionHandler";
+import RegisterActionHandler from "./ActionHandler/RegisterActionHandler";
+import RegisterAction from "../core/Actions/RegisterAction";
 
 const myContainer = new Container();
-myContainer.bind<IActionHandler>(TYPES.IActionHandler).to(ActionHandler);
+myContainer.bind<ActionRouter>(TYPES.ActionRouter).toConstantValue(new ActionRouter());
+myContainer.bind<IActionHandler<RegisterAction>>(TYPES.IActionHandler).to(RegisterActionHandler);
 
 export {myContainer};

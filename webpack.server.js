@@ -22,7 +22,7 @@ module.exports = {
         "sourceMapFilename": "Server.map.js"
     },
     "entry": __dirname + "/modules/server/Server",
-    "externals": [nodeExternals()],
+    "externals": [nodeExternals(), "sqlite3"],
     "target": "node",
     "devtool": "source-map",
     "console": false,
