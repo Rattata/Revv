@@ -11,9 +11,23 @@ import RegisterAction from "../../core/Actions/RegisterAction";
 @injectable()
 class ActionRouter {
   
-    route(msg : IAction){
+    route(msg : string){
       
-      var handler = myContainer.getNamed<IActionHandler>(TYPES.IActionHandler, msg.type.toString());
+        var json_message = undefined;
+        try {
+          json_message = JSON.parse(msg);
+        } catch (error) {}
+        
+        if(json_message != undefined || json_message.type == undefined){
+            return
+        }
+
+      var handler = myContainer.getNamed<IActionHandler>(TYPES.IActionHandler, json_message.type);
+      if(handler != undefined){
+        handler.handle(json_message);
+      } else {
+          console.error("no appropriate handler found for message!");
+      }
 
     }
 

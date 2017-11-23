@@ -25,14 +25,14 @@ sequelize.sync().done(
   (y) => {console.error(y)});
 
 //webserver
+var handler = myContainer.get<ActionRouter>(TYPES.ActionRouter);
 import express = require('express');
 var app = express();
 import expressUws = require('express-uws');
 var expressWs = expressUws(app);
 
-app.use("/",express.static("../app"));
-console.log("listening");
-var handler = myContainer.get<ActionRouter>(TYPES.ActionRouter);
+app.use('/',express.static("./dist/app/"));
+
 (app as any).ws('/echo', function(ws, req) {
   ws.on('message', function(msg) {
     handler.route(msg);

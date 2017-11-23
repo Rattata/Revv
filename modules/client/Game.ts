@@ -10,9 +10,13 @@ export class Game {
     constructor(canvas: any) {
         //test websocket upgrade
         var ws = new WebSocket('ws://localhost:3000/echo');
+        ws.onmessage = function(event: MessageEvent){
+            console.log(event)
+        };
         ws.onopen = function (event) {
             var toSend = new RegisterAction();
-            ws.send(toSend); 
+            
+            ws.send(JSON.stringify(toSend)); 
         };
         
         Game.canvas = canvas

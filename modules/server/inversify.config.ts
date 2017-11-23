@@ -10,6 +10,6 @@ import {ActionType} from "../core/Actions/ActionTypes"
 
 const myContainer = new Container();
 myContainer.bind<ActionRouter>(TYPES.ActionRouter).to( ActionRouter);
-myContainer.bind<IActionHandler>(TYPES.IActionHandler).to(RegisterActionHandler).whenTargetNamed(ActionType.RegisterAction.toString());
+myContainer.bind<IActionHandler>(TYPES.IActionHandler).to(RegisterActionHandler).whenTargetNamed(ActionType.RegisterAction);
 
 export {myContainer};
