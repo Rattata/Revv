@@ -33,10 +33,13 @@ var expressWs = expressUws(app);
 
 app.use('/',express.static("./dist/app/"));
 
-(app as any).ws('/echo', function(ws, req) {
+(app as expressUws).ws('/ws', function(ws, req) {
   ws.on('message', function(msg) {
-    handler.route(msg);
+    handler.route(msg, ws);
   });
+  ws.on('close', function(){
+    
+  })
 });
 console.log("webserver init done");
  

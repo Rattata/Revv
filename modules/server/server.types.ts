@@ -2,7 +2,8 @@
  
 const TYPES = {
     IActionHandler: Symbol("IActionHandler"),
-    ActionRouter: Symbol("ActionRouter")
+    ActionRouter: Symbol("ActionRouter"),
+    PlayerSocketRepository: Symbol("PlayerSocketRepository")
 };
 
  

@@ -35,7 +35,6 @@
   "dependencies": {
     "@types/babylonjs": "^2.3.31",
     "@types/express": "^4.0.33",
-    "@types/ws": "0.0.35",
     "@types/reflect-metadata": "^0.0.5",
     "babylonjs": "^2.4.1",
     "express": "^4.14.0",
