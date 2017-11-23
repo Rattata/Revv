@@ -1,3 +1,4 @@
+import RegisterAction from "../core/Actions/RegisterAction"
 export class Game {
     static currentGame: Game
     engine: BABYLON.Engine = null
@@ -10,8 +11,9 @@ export class Game {
         //test websocket upgrade
         var ws = new WebSocket('ws://localhost:3000/echo');
         ws.onopen = function (event) {
-  ws.send("Here's some text that the server is urgently awaiting!"); 
-};
+            var toSend = new RegisterAction();
+            ws.send(toSend); 
+        };
         
         Game.canvas = canvas
         this.engine = new BABYLON.Engine(canvas, false,null, false)

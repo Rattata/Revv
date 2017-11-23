@@ -2,11 +2,15 @@ var nodeExternals = require('webpack-node-externals');
 var webpack = require('webpack');
 module.exports = {
     "plugins": [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({ "mangle": true })
+        new webpack.optimize.DedupePlugin()
+        // ,
+        // new webpack.optimize.UglifyJsPlugin({ "mangle": false })
     ],
     "resolve": {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+        modulesDirectories: [
+        "node_modules"
+      ]
     },
     "module": {
         "loaders": [
@@ -22,11 +26,11 @@ module.exports = {
         "sourceMapFilename": "Server.map.js"
     },
     "entry": __dirname + "/modules/server/Server",
-    "externals": [nodeExternals(), "sqlite3"],
+    "externals": [nodeExternals()],
     "target": "node",
     "devtool": "source-map",
     "console": false,
-    "global": false,
+    "global": true,
     "process": true,
     "Buffer": true,
     "__filename": "mock",
