@@ -6,7 +6,6 @@ import { injectable, inject } from "inversify";
 import importToArray from "import-to-array";
 import { myContainer } from "../inversify.config"
 import { TYPES } from "../server.types"
-import RegisterAction from "../../core/Actions/RegisterAction";
 
 @injectable()
 class ActionRouter {
@@ -27,7 +26,7 @@ class ActionRouter {
 
         var handler = myContainer.getNamed<IActionHandler>(TYPES.IActionHandler, json_message.type);
         if (handler != undefined) {
-            return handler.handle(json_message, function (response: object, success?: boolean) {
+            return handler.handle(json_message, ws, function (response: object, success?: boolean) {
                 ws.send(response);
             });
         } else {

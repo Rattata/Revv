@@ -10,35 +10,42 @@ import { TYPES } from "../../server.types";
 
 
 @injectable()
-export default class RegisterActionHandler implements IActionHandler {
+export default class UnregisterActionHandler implements IActionHandler {
 
     @inject(TYPES.PlayerSocketRepository)
-    playerSocketRepo : PlayerSocketRepository;
+    playerSocketRepo: PlayerSocketRepository;
 
 
-    handle(msg: Actions.IAction, ws: WebSocket, done: (response: object, success : boolean )=> void): void {
-        var registerMsg = msg as Actions.RegisterAction;
+    handle(msg: Actions.IAction, ws: WebSocket, done: (response: object, success: boolean) => void): void {
+        var registerMsg = msg as Actions.UnregisterAction;
         var errmessage = undefined;
-        
-        var p_player = Models.Player.findCreateFind<Models.Player>({where: {id: registerMsg.playerId }});
-        
-        var p_lobby = Models.Team.findOrCreate<Models.Team>({ where: { state: LOBBY_STATE.OPEN }, attributes: [] });
+
+
+        var p_player = Models.Player.findCreateFind<Models.Player>({ where: { id: registerMsg.playerId } });
+
+        var p_lobby = Models.Team.findOrCreate<Models.Team>({ where: { state: LOBBY_STATE.OPEN } });
 
         var p_all = Promise.all([p_lobby, p_player]);
         p_all.then((resolved) => {
-            
+
             var player: Models.Player = resolved[1].value[1];
             var team: Models.Team = resolved[2].value[1];
-            
+
             this.playerSocketRepo.map.set(player.id, ws);
+
+            ws.send(JSON.stringify(
+                {
+                    type: msg.type,
+                    player_id: player.id,
+                    team_id: team.id
+                }));
             
-            ws.send(JSON.stringify({player_id: player.id}));
 
         },
-        (reject) => {
-            console.log(reject);
-            ws.send(JSON.stringify({type: "error"}))
-        });
+            (reject) => {
+                console.log(reject);
+                ws.send(JSON.stringify({ type: "error" }))
+            });
     };
 
     version(): string { return "1" };

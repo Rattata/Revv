@@ -1,6 +1,6 @@
 import {Table, Column, Model, PrimaryKey, HasMany} from 'sequelize-typescript';
 import { BelongsTo } from 'sequelize-typescript/lib/annotations/association/BelongsTo';
-import { Team, User } from './index';
+import { Team } from './index';
 
 @Table
 class Player extends Model<Player> {
@@ -9,11 +9,9 @@ class Player extends Model<Player> {
   name: string;
 
   @PrimaryKey
+  @Column
   id: number;
   
-  @BelongsTo(()=> User)
-  user: User;
-
   @BelongsTo(()=> Team)
   team: Team;
 }

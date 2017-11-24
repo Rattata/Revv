@@ -3,8 +3,8 @@ import * as Models from "../Model"
 
 @injectable()
 export class PlayerSocketRepository{
-    map: Map<number,Models.Player>
+    map: Map<number,WebSocket>
     constructor(){
-        this.map = new Map<number,Models.Player>();
+        this.map = new Map<number,WebSocket>();
     }
 }

@@ -1,7 +1,7 @@
 import {IAction} from "./IAction";
 import {ActionType} from "./ActionTypes"
 
-export class RegisterAction implements IAction {
-    type: ActionType = ActionType.RegisterAction;
+export class UnregisterAction implements IAction {
+    type: ActionType = ActionType.UnregisterAction;
     playerId: number = undefined;
 }

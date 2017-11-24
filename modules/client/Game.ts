@@ -1,4 +1,4 @@
-import RegisterAction from "../core/Actions/RegisterAction"
+import * as Actions from "../core/Actions"
 export class Game {
     static currentGame: Game
     engine: BABYLON.Engine = null
@@ -9,12 +9,12 @@ export class Game {
 
     constructor(canvas: any) {
         //test websocket upgrade
-        var ws = new WebSocket('ws://localhost:3000/echo');
+        var ws = new WebSocket('ws://localhost:3000/ws');
         ws.onmessage = function(event: MessageEvent){
             console.log(event)
         };
         ws.onopen = function (event) {
-            var toSend = new RegisterAction();
+            var toSend = new Actions.RegisterAction();
             
             ws.send(JSON.stringify(toSend)); 
         };

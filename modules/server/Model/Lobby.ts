@@ -12,9 +12,9 @@ class Lobby extends Model<Lobby> {
   @HasMany(()=> Player)
   players: Player[];
   
-  @Column
   @Default(LOBBY_STATE.OPEN)
-  state: LOBBY_STATE;
+  @Column
+  state: number = LOBBY_STATE.OPEN;
 }
 
 export {Lobby}
