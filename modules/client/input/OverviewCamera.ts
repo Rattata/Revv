@@ -2,8 +2,10 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
     // the input manager will fill the parent camera
     camera: BABYLON.FreeCamera;
     private _keys = new Array();
+    private _scrolls = new Array();
     private _onKeyUp: any;
     private _onKeyDown: any;
+    private _onScroll: any;
     private _engine: BABYLON.Engine;
     private _scene: BABYLON.Scene;
     
@@ -24,6 +26,7 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
     constructor(camera: BABYLON.FreeCamera){
         this.camera = camera;
         this._keys = new Array();
+        this._scrolls = new Array();
         this.keysUp =  [87];
         this.keysDown = [83];
         this.keysLeft = [65];
@@ -61,9 +64,13 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
                     }
                 }
             };
+            this._onScroll = function(evt: WheelEvent){
+                _this._scrolls.push(evt.wheelDelta)
+            }
 
             window.addEventListener("keydown", this._onKeyDown, false);
             window.addEventListener("keyup", this._onKeyUp, false);
+            window.addEventListener("wheel", this._onScroll, false);
             // BABYLON.Tools.RegisterTopRootEvents([
             //     { name: "blur", handler: this._onLostFocus }
             // ]);
@@ -75,6 +82,7 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
         if (this._scene) {
             window.removeEventListener("keydown", this._onKeyDown)
             window.removeEventListener("keyup", this._onKeyUp)
+            window.removeEventListener("wheel", this._onScroll)
         }
         this._onKeyDown = null;
         this._onKeyUp = null;
@@ -90,19 +98,23 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
             if (this.keysLeft.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
             } else if (this.keysDown.indexOf(keyCode) !== -1) {
                 this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0,-movementSpeed,0))
                 this.camera.position.addInPlace(new BABYLON.Vector3(0,-movementSpeed,0))
             } else if (this.keysRight.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
             } else if (this.keysUp.indexOf(keyCode) !== -1) {
                 this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0,movementSpeed,0))
                 this.camera.position.addInPlace(new BABYLON.Vector3(0,movementSpeed,0))
             }
         }
+        for(var index =0 ; index < this._scrolls.length; index ++){
+            this.camera.position.addInPlace(new BABYLON.Vector3(0,0,this._scrolls[index]/ 20))
+        }
+        this._scrolls = new Array();
         return
     };
 }
