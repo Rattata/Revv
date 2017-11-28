@@ -30,6 +30,7 @@ class GeographyBuilder {
     // height
     // map
     // distribution
+    // voronoi points
     constructor(width, height, distribution) {
         this.height = height;
         this.distribution = distribution;
@@ -44,10 +45,24 @@ class GeographyBuilder {
         }
     }
 
-    static isvalid(x, y) {
+    static isvalid(map, x, y) {
         return (x >= 0 && x < map.length) &&
             (y >= 0 && y < map[0].length) ?
             true : false;
+    }
+
+    voronoi(randomPoints){
+        var randomStore = new Array(randomPoints);
+        for(var i = 0 ;i < randomPoints; i++){
+            var rX = Math.round(Math.random() * map.length);
+            var rY = Math.round(Math.random() * map[rX].length);
+            randomPoints[i] = [rX,rY]
+        }
+        return this
+    }
+
+    delauney(){
+
     }
 
     static smooth(level_map = map, smooth_strength = 0.4) {
@@ -140,10 +155,12 @@ class GeographyBuilder {
 
 
 var mapped = new GeographyBuilder(hexX,hexY,distribution)
-.noise(4,4,distribution,0.5)
-.noise(7,7,distribution,0.3)
-.noise(9,9,distribution,0.25)
-.smooth(0.25).build();
+.noise(4,4,distribution,0.4)
+.noise(7,7,distribution)
+.noise(9,9,distribution)
+.noise(3,3,distribution,0.5)
+// .smooth(0.2)
+.build();
 
 
 function setup() {
@@ -162,19 +179,6 @@ function draw() {
             noStroke()
             fill(predist[mapped[i][j] - 1][2])
             polygon((i * mydist) + offset, (j * myheight) + reminderY + offset, R, 6);
-            pop();
-        }
-    }
-
-    for (var i = 0; i < hexX; i++) {
-        for (var j = 0; j < hexY; j++) {
-
-            let reminderY = (i % 2) == 0 ? (1 / 2 * myheight) : 0;
-
-            push();
-            noStroke()
-            fill(predist[mapped[hexX - i - 1][hexY - j - 1] - 1][2])
-            polygon((i * mydist) + 40 * R, (j * myheight) + reminderY + offset, R, 6);
             pop();
         }
     }
