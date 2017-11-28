@@ -112,7 +112,7 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
             }
         }
         for(var index =0 ; index < this._scrolls.length; index ++){
-            this.camera.position.addInPlace(new BABYLON.Vector3(0,0,this._scrolls[index]/ 20))
+            this.camera.position.addInPlace(new BABYLON.Vector3(0,0,-this._scrolls[index]/ 20))
         }
         this._scrolls = new Array();
         return

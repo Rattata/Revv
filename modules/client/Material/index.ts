@@ -1,1 +1,1 @@
-export * from "./Mountain"
+export * from "./MountainMaterial"

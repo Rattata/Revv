@@ -3,6 +3,9 @@ import { myContainer } from "./inversify.config";
 import { TYPES } from "./types";
 import { OverviewCamera } from "./input/OverviewCamera"
 import { interfaces } from "inversify/dts/interfaces/interfaces";
+import {MeshFactory} from "./Mesh/"
+import {MaterialFactory} from "./Material/MountainMaterial"
+import {GeographyBuilder} from "../core/Generator/GeographyBuilder"
 
 //contains late binding
 export class Game {
@@ -59,62 +62,89 @@ export class Game {
         var target = new BABYLON.Vector3(0, 0, 0);
         camera.setTarget(target)
         
-        var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
-        // light.diffuse = new BABYLON.Color3(0.2, 0.2, 0.25)
-        // light.specular = new BABYLON.Color3(0.16, 0.16, 0.16)
-        // light.groundColor = new BABYLON.Color3(0.1, 0.05, 0.05)
-        var hR = 1;
-        var offset = 15;
-        var hwidth = hR * 2;
-        var hdist = hwidth * (3 / 4)
-        var hheight = (Math.sqrt(3) / 2) * hwidth
-
-        function genpolygon(x, y, radius, height, npoints) {
-            var angle = Math.PI * 2 / npoints;
-            var points = [];
-            for (var a = 0; a < Math.PI * 2; a += angle) {
-                var tempP = [];
-                var sx = x + Math.cos(a) * radius;
-                var sy = y + Math.sin(a) * radius;
-                tempP.push(sx)
-                tempP.push(sy)
-                var tempPH = tempP.slice();
-                tempP.push(0)
-                tempPH.push(height)
-                points.push(tempP)
-                points.push(tempPH)
-            }
-            return points
-        }
-
-
-        var HexagonalPrism = {
-            "name": "Hexagonal Prism",
-            "category": ["Prism"],
-            "vertex": genpolygon(0, 0, hR, 20, 6),
-            "face": [[2,3,1,0], [4,5,3,2],[6,7,5,4],[8,9,7,6],[10,11,9,8],[0,1,11,10], [10,8,6,4,2,0], [1, 3, 5, 7, 9, 11]]
-        }
-
-        var mat = new BABYLON.StandardMaterial("mat1", scene);
-        mat.alpha = 1.0;
-        mat.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1.0);
-        var number = 0;
+        var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), scene);
+       
         var polygons = new Array<BABYLON.Mesh>();
 
 
-        var polyhedron = HexagonalPrism;
+        var water = [1, 20, '#2E86C1', 'water'];
+        var flatland = [2, 0, '#DAF7A6', 'flatland'];
+        var mountain = [3, 20, '#BA4A00', 'mountain'];
+        var predist = [water, flatland, mountain]
+        
+        var distribution = (function () {
+            var dist = []
+            predist.forEach(element => {
+                for (var i = 0; i < element[1]; i++) {
+                    dist.push(element[0]);
+                }
+            });
+            return dist;
+        })()
 
-        var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron, size: 2 }, scene);
-        polygon.convertToFlatShadedMesh();
-        polygon.material = mat;
-        polygon.position.x = 0;
-        polygon.position.y = 0;
-        polygon.position.z = 0;
-        // polygon.rotation.x = Math.PI * 2 /8
-        // polygon.rotation.y = Math.PI * 2 /2
-        polygon.rotation.z = Math.PI * 2 / 2
-        number++
-        polygons.push(polygon);
+        
+        var mountainMesh = MeshFactory.MountainMesh(scene)
+        mountainMesh.material = MaterialFactory.getMountainMaterial(scene);
+        var waterMesh = MeshFactory.WaterMesh(scene)
+        waterMesh.material = MaterialFactory.getWaterMaterial(scene);
+        console.log(waterMesh.getBoundingInfo().boundingBox.vectorsWorld)
+
+        var flatMesh = MeshFactory.FlatlandMesh(scene)
+        flatMesh.material = MaterialFactory.getFlatlandMaterial(scene);
+        
+        flatMesh.position.x = -10
+        flatMesh.position.y = 0
+
+        waterMesh.position.x = -5
+        waterMesh.position.y = 0
+
+        mountainMesh.position.x = -15;
+        mountainMesh.position.y = 0;
+        mountainMesh.position.z = 0;
+        polygons.push(mountainMesh);
+        polygons.push(waterMesh);
+        polygons.push(flatMesh);
+
+        var mapped = new GeographyBuilder(26,26,distribution)
+        .noise(4,4,distribution,0.4)
+        .noise(7,7,distribution,0.3)
+        .noise(9,9,distribution)
+        .noise(3,3,distribution,0.5)
+        // .smooth(0.2)
+        .build();
+        var map2 = new Array();
+        for(var i = 0 ;i < mapped.length; i++){
+            map2[i] = new Array()
+            var yOffset = 0;
+            if(i % 2 == 0){
+                yOffset = MeshFactory.hheight() / 2
+            }
+            for(var j = 0 ;j < mapped[i].length; j++){
+                var instance : BABYLON.InstancedMesh = undefined
+                switch(mapped[i][j]){
+                    case 1: { 
+                        instance = waterMesh.createInstance("water:"+i+":"+j)
+                        break; 
+                     } 
+                     case 2: { 
+                        instance = flatMesh.createInstance("flat:"+i+":"+j)
+                        break; 
+                     } 
+                     case 3: { 
+                        instance = mountainMesh.createInstance("mountain:"+i+":"+j)
+                        break; 
+                     } 
+                     default: { 
+                        console.log("err")
+                        console.log(mapped[i][j])
+                        break; 
+                     } 
+                }
+                instance.position.x = i * 3
+                instance.position.y = j * MeshFactory.hheight() + yOffset
+            }
+        }
+
 
         var clock = {
             before: performance.now(),

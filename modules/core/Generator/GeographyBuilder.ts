@@ -5,22 +5,22 @@ export class GeographyBuilder {
     hexY: number = 26;
     R: number = 15;
     offset: number = 15;
-    width: number = R * 2;
-    dist: number = mywidth * (3 / 4)
-    height: number = (Math.sqrt(3) / 2) * mywidth
+    width: number = this.R * 2;
+    dist: number = this.width * (3 / 4)
+    height: number = (Math.sqrt(3) / 2) * this.width
 
-    lerps: number = 0;
+    lerps: number = 1;
 
 
-    water: Array<any> = [1, 20, '#2E86C1', 'water'];
-    flatland: Array<any> = [2, 0, '#DAF7A6', 'flatland'];
-    mountain: Array<any> = [3, 20, '#BA4A00', 'mountain'];
-    predist: Array<any> = [water, flatland, mountain]
+    static water: Array<any> = [1, 20, '#2E86C1', 'water'];
+    static flatland: Array<any> = [2, 0, '#DAF7A6', 'flatland'];
+    static mountain: Array<any> = [3, 20, '#BA4A00', 'mountain'];
+    static predist: Array<any> = [GeographyBuilder.water, GeographyBuilder.flatland, GeographyBuilder.mountain]
 
     map : Array<Array<any>>;
     distribution: Array<any> = (function () {
         var dist = []
-        predist.forEach(element => {
+        GeographyBuilder.predist.forEach(element => {
             for (var i = 0; i < element[1]; i++) {
                 dist.push(element[0]);
             }

@@ -1,8 +1,8 @@
 export class Hex {
-    _H : number;
-    _Q : number;
-    _R : number;
-    _S : number;
+    public _H : number;
+    public _Q : number;
+    public _R : number;
+    public _S : number;
     constructor(Q : number, R : number, _S : number) {
         this._H = 1
         this._Q = Q

@@ -1,8 +1,10 @@
 import { Hex } from "./Hex";
 
+import {ITerrain} from "./ITerrain"
 class WaterHex extends Hex{
-    public color: string = '#2E86C1';
-    public height: number = 1;
+    public static color: string = '#2E86C1';
+    public static height: number = 1;
+    public static terrainName:string = "water"
 }
 
 export {WaterHex}
