@@ -82,12 +82,19 @@ export class Game {
             return dist;
         })()
 
-        
         var mountainMesh = MeshFactory.MountainMesh(scene)
         mountainMesh.material = MaterialFactory.getMountainMaterial(scene);
         var waterMesh = MeshFactory.WaterMesh(scene)
         waterMesh.material = MaterialFactory.getWaterMaterial(scene);
         console.log(waterMesh.getBoundingInfo().boundingBox.vectorsWorld)
+
+        var ship = BABYLON.MeshBuilder.CreateBox("ship",
+        {depth: 3, width: 3, height:3, updatable:true}
+        ,scene)
+        ship.material = new BABYLON.StandardMaterial("shipmaterial", scene)
+        ship.position.x = -20
+        ship.position.y = 0
+        ship.position.z = 40
 
         var flatMesh = MeshFactory.FlatlandMesh(scene)
         flatMesh.material = MaterialFactory.getFlatlandMaterial(scene);
@@ -145,6 +152,8 @@ export class Game {
             }
         }
 
+        var hl = new BABYLON.HighlightLayer("hl1", scene);
+        
 
         var clock = {
             before: performance.now(),
@@ -155,6 +164,18 @@ export class Game {
                 return delta;
             }
         }
+
+        window.addEventListener("click", function(ev){
+            var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            console.log(pickResult)
+            if(pickResult.hit ){
+                // ship.position = new BABYLON.Vector3(pickResult.pickedMesh.position.x, pickResult.pickedMesh.position.y, 30)
+                // var animationBox = new BABYLON.Animation("myAnimation", "position.x", pickResult.pickedMesh.position.x, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+                BABYLON.Animation.CreateAndStartAnimation('shipmoveX', ship, 'position.x', 30,30, ship.position.x, pickResult.pickedMesh.position.x, 0);
+                BABYLON.Animation.CreateAndStartAnimation('shipmoveY', ship, 'position.y', 30,30, ship.position.y, pickResult.pickedMesh.position.y,0);
+                
+            }
+        })
 
         scene.registerAfterRender(() => {
             var delta = clock.getDelta();

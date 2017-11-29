@@ -1,2 +1,2 @@
-export * from './Hex'
+export * from './Terrain/Hex'
 export * from './Map' 

@@ -1,4 +1,4 @@
-import { Hex } from './Hex'
+import { Hex } from './Terrain/'
 
 export class Map {
     borderX: number; borderY: number;

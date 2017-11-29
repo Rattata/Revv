@@ -1,4 +1,4 @@
- import {Hex} from '../../core/Hex'
+ import {Hex} from '../../core/Terrain/'
 
      var maxHeight = 5
      function generateMap(X : number, Y:number){
