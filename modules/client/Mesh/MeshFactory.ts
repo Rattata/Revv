@@ -49,7 +49,7 @@ export class MeshFactory {
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron, size: 2 }, scene);
         polygon.convertToFlatShadedMesh();
         polygon.enableEdgesRendering();
-
+        
         polygon.scaling = new BABYLON.Vector3(1,1,1);
         return polygon
     }

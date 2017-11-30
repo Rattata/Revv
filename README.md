@@ -7,16 +7,33 @@ Webpack TS ES6
 npm install
 gulp
 
+# TBD
+------
+GUI?
+
+
 # TODO
 ------
-1. ~~Basic build system~~
-2. ~~Basic Architecturing~~
-3. Product: basic map shown, turn timer
-..* Seperate logic and render loop
-4. Product: sync client server
-5. Product: turn based
+1. Rendering loop
+2. Rules client(create, validate) /server(resolve order)
+3. Turn system
+4. GUI?
+99. Unfailing map creation through voronoi
 
-## Shared
+
+# Serverside
+------
+Priorities
+1. Secure serverside logic
+1. scale through orchestration / load balancing
+
+
+
+# Clientside
+1. Low resource usage
+2. fun?
+
+# Shared
 * Map
 * Hex
 * Rules

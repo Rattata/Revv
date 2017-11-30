@@ -1,4 +1,5 @@
-
+import {Distribution} from "./Distribution"
+import { Hex, WaterHex } from "modules/core/Terrain";
 export class GeographyBuilder {
 
     hexX: number = 26;
@@ -17,16 +18,8 @@ export class GeographyBuilder {
     static mountain: Array<any> = [3, 20, '#BA4A00', 'mountain'];
     static predist: Array<any> = [GeographyBuilder.water, GeographyBuilder.flatland, GeographyBuilder.mountain]
 
-    map : Array<Array<any>>;
-    distribution: Array<any> = (function () {
-        var dist = []
-        GeographyBuilder.predist.forEach(element => {
-            for (var i = 0; i < element[1]; i++) {
-                dist.push(element[0]);
-            }
-        });
-        return dist;
-    })()
+    private map : Array<Array<any>>;
+    private distribution: Array<any>;
     // width
     // height
     // map
@@ -144,9 +137,29 @@ export class GeographyBuilder {
     }
 
     build() {
+        var distributeMap = new Array<Array<Hex>>(this.map.length);
         for (var lx = 0; lx < this.map.length; lx++) {
+            distributeMap[lx] = new Array(this.map[lx].length)
             for (var ly = 0; ly < this.map[lx].length; ly++) {
                 this.map[lx][ly] = Math.round(this.map[lx][ly] / this.lerps);
+                var hex : Hex = undefined;
+                switch(this.map[lx][ly] ){
+                    case 1 : {
+                        hex = new WaterHex()
+                        break;
+                    }
+                    case 2 : {
+
+                        break;
+                    }
+                    case 3 : {
+                        break;
+                    }
+                    default: {
+                        console.log("could not find value associated with " + this.map[lx][ly])
+                    }
+                }
+                distributeMap[lx][ly] = 
             }
         }
         return this.map;

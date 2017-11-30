@@ -1,11 +1,12 @@
+import {Clock} from "./Clock"
 import * as Actions from "../core/Actions"
 import { myContainer } from "./inversify.config";
 import { TYPES } from "./types";
 import { OverviewCamera } from "./input/OverviewCamera"
 import { interfaces } from "inversify/dts/interfaces/interfaces";
-import {MeshFactory} from "./Mesh/"
-import {MaterialFactory} from "./Material/MountainMaterial"
-import {GeographyBuilder} from "../core/Generator/GeographyBuilder"
+import { MeshFactory } from "./Mesh/"
+import { MaterialFactory } from "./Material/MaterialFactory"
+import { GeographyBuilder } from "../core/Generator/GeographyBuilder"
 
 //contains late binding
 export class Game {
@@ -26,7 +27,6 @@ export class Game {
         };
         ws.onopen = function (event) {
             var toSend = new Actions.RegisterAction();
-
             ws.send(JSON.stringify(toSend));
         };
 
@@ -61,9 +61,9 @@ export class Game {
         camera.inputs.attachInput(input)
         var target = new BABYLON.Vector3(0, 0, 0);
         camera.setTarget(target)
-        
+
         var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), scene);
-       
+
         var polygons = new Array<BABYLON.Mesh>();
 
 
@@ -71,7 +71,7 @@ export class Game {
         var flatland = [2, 0, '#DAF7A6', 'flatland'];
         var mountain = [3, 20, '#BA4A00', 'mountain'];
         var predist = [water, flatland, mountain]
-        
+
         var distribution = (function () {
             var dist = []
             predist.forEach(element => {
@@ -86,11 +86,10 @@ export class Game {
         mountainMesh.material = MaterialFactory.getMountainMaterial(scene);
         var waterMesh = MeshFactory.WaterMesh(scene)
         waterMesh.material = MaterialFactory.getWaterMaterial(scene);
-        console.log(waterMesh.getBoundingInfo().boundingBox.vectorsWorld)
 
         var ship = BABYLON.MeshBuilder.CreateBox("ship",
-        {depth: 3, width: 3, height:3, updatable:true}
-        ,scene)
+            { depth: 1, width: 1, height: 1, updatable: true }
+            , scene)
         ship.material = new BABYLON.StandardMaterial("shipmaterial", scene)
         ship.position.x = -20
         ship.position.y = 0
@@ -98,7 +97,7 @@ export class Game {
 
         var flatMesh = MeshFactory.FlatlandMesh(scene)
         flatMesh.material = MaterialFactory.getFlatlandMaterial(scene);
-        
+
         flatMesh.position.x = -10
         flatMesh.position.y = 0
 
@@ -112,68 +111,61 @@ export class Game {
         polygons.push(waterMesh);
         polygons.push(flatMesh);
 
-        var mapped = new GeographyBuilder(26,26,distribution)
-        .noise(4,4,distribution,0.4)
-        .noise(7,7,distribution,0.3)
-        .noise(9,9,distribution)
-        .noise(3,3,distribution,0.5)
-        // .smooth(0.2)
-        .build();
+        var mapped = new GeographyBuilder(26, 26, distribution)
+            .noise(4, 4, distribution, 0.4)
+            .noise(7, 7, distribution, 0.3)
+            .noise(9, 9, distribution)
+            .noise(3, 3, distribution, 0.5)
+            // .smooth(0.2)
+            .build();
         var map2 = new Array();
-        for(var i = 0 ;i < mapped.length; i++){
+        for (var i = 0; i < mapped.length; i++) {
             map2[i] = new Array()
             var yOffset = 0;
-            if(i % 2 == 0){
+            if (i % 2 == 0) {
                 yOffset = MeshFactory.hheight() / 2
             }
-            for(var j = 0 ;j < mapped[i].length; j++){
-                var instance : BABYLON.InstancedMesh = undefined
-                switch(mapped[i][j]){
-                    case 1: { 
-                        instance = waterMesh.createInstance("water:"+i+":"+j)
-                        break; 
-                     } 
-                     case 2: { 
-                        instance = flatMesh.createInstance("flat:"+i+":"+j)
-                        break; 
-                     } 
-                     case 3: { 
-                        instance = mountainMesh.createInstance("mountain:"+i+":"+j)
-                        break; 
-                     } 
-                     default: { 
-                        console.log("err")
-                        console.log(mapped[i][j])
-                        break; 
-                     } 
+            for (var j = 0; j < mapped[i].length; j++) {
+                var instance: BABYLON.InstancedMesh = undefined
+                switch (mapped[i][j]) {
+                    case 1: {
+                        instance = waterMesh.createInstance("water:" + i + ":" + j)
+                        break;
+                    }
+                    case 2: {
+                        instance = flatMesh.createInstance("flat:" + i + ":" + j)
+                        break;
+                    }
+                    case 3: {
+                        instance = mountainMesh.createInstance("mountain:" + i + ":" + j)
+                        break;
+                    }
+                    default: {
+                        console.log("err" + mapped[i][j])
+                        break;
+                    }
                 }
+                
                 instance.position.x = i * 3
                 instance.position.y = j * MeshFactory.hheight() + yOffset
             }
-        }
+        }     
 
+        var clock = new Clock()
         var hl = new BABYLON.HighlightLayer("hl1", scene);
         
 
-        var clock = {
-            before: performance.now(),
-            getDelta: function () {
-                var now = performance.now();
-                var delta = now - this.before;
-                this.before = now;
-                return delta;
-            }
-        }
-
-        window.addEventListener("click", function(ev){
+        window.addEventListener("click", function (ev) {
             var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-            console.log(pickResult)
-            if(pickResult.hit ){
+            if (pickResult.hit) {
                 // ship.position = new BABYLON.Vector3(pickResult.pickedMesh.position.x, pickResult.pickedMesh.position.y, 30)
                 // var animationBox = new BABYLON.Animation("myAnimation", "position.x", pickResult.pickedMesh.position.x, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-                BABYLON.Animation.CreateAndStartAnimation('shipmoveX', ship, 'position.x', 30,30, ship.position.x, pickResult.pickedMesh.position.x, 0);
-                BABYLON.Animation.CreateAndStartAnimation('shipmoveY', ship, 'position.y', 30,30, ship.position.y, pickResult.pickedMesh.position.y,0);
-                
+                var height = pickResult.pickedMesh._boundingInfo.boundingBox.maximum.z
+                BABYLON.Animation.CreateAndStartAnimation('shipmoveX', ship, 'position.x', 30, 30, ship.position.x, pickResult.pickedMesh.position.x, 0);
+                BABYLON.Animation.CreateAndStartAnimation('shipmoveY', ship, 'position.y', 30, 30, ship.position.y, pickResult.pickedMesh.position.y, 0);
+                BABYLON.Animation.CreateAndStartAnimation('shipmoveZ', ship, 'position.z', 30, 30, ship.position.z, height + 1, 0);
+                // hl.addMesh(ship, BABYLON.Color3.Green());
+
             }
         })
 

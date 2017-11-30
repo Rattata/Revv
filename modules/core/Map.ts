@@ -1,50 +1,44 @@
-import { Hex } from './Terrain/'
+import { Hex, MountainHex } from './Terrain/'
+import * as _ from "lodash";
 
 export class Map {
-    borderX: number; borderY: number;
-    map;
-    constructor(map : Array<Array<Hex>>) {
-        this.map = map
-    }
+    private map: Array<Array<Hex>>
+    private height: number;
+    private width: number;
 
-
-    getHexs() {
-        var retHexes = new Array()
-        for (var i = 0; i < this.map.length; i++) {
-            for (var j = 0; j < this.map[i].length; j++) {
-                if (this.map[i][j] !== undefined) {
-                    retHexes.push(this.map[i][j])
-                }
+    constructor(map: Array<Array<number>>) {
+        this.width = map.length;
+        this.height = map[map.length - 1].length;
+        var deadSquares = this.height / 2;
+        this.map = new Array<Array<Hex>>(this.width + deadSquares)
+        for(var x = 0 ; x < map.length ; x++){
+            for(var y = 0 ; y < map[x].length ; y++){
+                
+                //horizontal
+                var R = -Math.floor(x / 2)+y
+                
+                //vertical
+                var Q = y
+                
+                /**
+                 * first f[] = -floor(r / 2)
+                 * col = q + r / 2
+                 * row = r
+                 */
+                var tempHex = new MountainHex()
+                this.map[x][y] = tempHex;
             }
         }
-        return retHexes
+        
     }
 
-    getHex(R, Q) {
-        return this.map[R][Q + R / 2]
+
+
+    static Serialize(): string {
+        return "";
     }
 
-    printmap() {
-        var printval = ""
-        for (var u = 0; u < this.map.length; u++) {
-            for (var y = 0; y < this.map[u].length; y++) {
-                if (this.map[u][y] != undefined) {
-                    printval = printval.concat(String(this.map[u][y]._H).substr(0, 3).concat('\t'))
-                }
-                else {
-                    printval = printval.concat('000 \t')
-                }
-            }
-            printval = printval.concat("\n")
-        }
-        console.log(printval)
-    }
-
-    static Deserialize(array : Array<Hex>[][]){
-
-    }
-
-    static Serialize () : Array<Hex> {
-        return new Array<Hex>();
+    static deserialize(): Array<Array<Hex>> {
+        return 
     }
 }
