@@ -12,20 +12,14 @@ export class GeographyBuilder {
 
     lerps: number = 1;
 
-
-    static water: Array<any> = [1, 20, '#2E86C1', 'water'];
-    static flatland: Array<any> = [2, 0, '#DAF7A6', 'flatland'];
-    static mountain: Array<any> = [3, 20, '#BA4A00', 'mountain'];
-    static predist: Array<any> = [GeographyBuilder.water, GeographyBuilder.flatland, GeographyBuilder.mountain]
-
     private map : Array<Array<any>>;
-    private distribution: Array<any>;
+    private distribution: Distribution;
     // width
     // height
     // map
     // distribution
     // voronoi points
-    constructor(width, height, distribution) {
+    constructor(width, height, distribution: Distribution) {
         this.height = height;
         this.distribution = distribution;
         this.width = width;
@@ -33,7 +27,8 @@ export class GeographyBuilder {
         for (var x = 0; x < width; x++) {
             this.map[x] = new Array(height);
             for (var y = 0; y < height; y++) {
-                this.map[x][y] = distribution[Math.round(Math.random() * (distribution.length - 1))];
+                console.log(distribution)
+                this.map[x][y] = this.distribution.pickRandom().height;
             }
         }
     }
@@ -111,14 +106,14 @@ export class GeographyBuilder {
     }
 
     ///generate a random map with distribution, then interpolate to map at large
-    noise(width, height, distribution = this.distribution, smooth = 0): GeographyBuilder {
+    noise(width, height, distribution : Distribution = this.distribution, smooth = 0): GeographyBuilder {
         var lerpX = width;
         var lerpY = height;
         var tempmap = new Array(lerpX);
         for (var lx = 0; lx < tempmap.length; lx++) {
             tempmap[lx] = new Array(lerpY);
             for (var ly = 0; ly < tempmap[lx].length; ly++) {
-                tempmap[lx][ly] = distribution[Math.round(Math.random() * (distribution.length - 1))]
+                tempmap[lx][ly] = distribution.pickRandom().height
             }
         }
         if (smooth != 0) {

@@ -1,4 +1,5 @@
 import {WaterHex, MountainHex, FlatlandHex} from "../Terrain"
+import { ITerrain } from "modules/core/Terrain/ITerrain";
 export class Distribution {
     distribution: Array<any>
     
@@ -11,7 +12,7 @@ export class Distribution {
         this.distribution = (function () {
             var dist = []
             predist.forEach(element => {
-                for (var i = 0; i < element[1]; i++) {
+                for (var i = 0; i < element[0]; i++) {
                     dist.push(element[1]);
                 }
             });
@@ -19,8 +20,10 @@ export class Distribution {
         })()
     };
 
-    pickRandom(): Array<any>{
-        return this.distribution[Math.round((this.distribution.length - 1 )* Math.random()) ]
+    pickRandom(): ITerrain{
+        var terrain = this.distribution[Math.round((this.distribution.length - 1 )* Math.random()) ]
+        if(terrain == undefined) {console.error(terrain)}
+        return terrain 
     }
     
 }

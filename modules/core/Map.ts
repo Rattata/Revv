@@ -47,7 +47,6 @@ export class Map {
                 this.map[Rmap][Q] = tempHex;
             }
         }
-        console.log(this.map)
         
     }
 

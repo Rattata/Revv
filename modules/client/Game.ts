@@ -8,6 +8,7 @@ import { MeshFactory } from "./Mesh/"
 import { MaterialFactory } from "./Material/MaterialFactory"
 import { GeographyBuilder } from "../core/Generator/GeographyBuilder"
 import { Map } from "../core/Map";
+import { Distribution } from "../core/Generator/Distribution";
 
 //contains late binding
 export class Game {
@@ -67,22 +68,6 @@ export class Game {
 
         var polygons = new Array<BABYLON.Mesh>();
 
-
-        var water = [1, 20, '#2E86C1', 'water'];
-        var flatland = [2, 0, '#DAF7A6', 'flatland'];
-        var mountain = [3, 20, '#BA4A00', 'mountain'];
-        var predist = [water, flatland, mountain]
-
-        var distribution = (function () {
-            var dist = []
-            predist.forEach(element => {
-                for (var i = 0; i < element[1]; i++) {
-                    dist.push(element[0]);
-                }
-            });
-            return dist;
-        })()
-
         var mountainMesh = MeshFactory.MountainMesh(scene)
         mountainMesh.material = MaterialFactory.getMountainMaterial(scene);
         var waterMesh = MeshFactory.WaterMesh(scene)
@@ -111,7 +96,7 @@ export class Game {
         polygons.push(mountainMesh);
         polygons.push(waterMesh);
         polygons.push(flatMesh);
-
+        var distribution = new Distribution();
         var mapped = new GeographyBuilder(26, 26, distribution)
             .noise(4, 4, distribution, 0.4)
             .noise(7, 7, distribution, 0.3)
