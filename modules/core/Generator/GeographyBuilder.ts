@@ -2,13 +2,8 @@ import {Distribution} from "./Distribution"
 import { Hex, WaterHex } from "modules/core/Terrain";
 export class GeographyBuilder {
 
-    hexX: number = 26;
-    hexY: number = 26;
-    R: number = 15;
-    offset: number = 15;
-    width: number = this.R * 2;
-    dist: number = this.width * (3 / 4)
-    height: number = (Math.sqrt(3) / 2) * this.width
+    width: number = undefined;
+    height: number = undefined
 
     lerps: number = 1;
 
@@ -27,7 +22,6 @@ export class GeographyBuilder {
         for (var x = 0; x < width; x++) {
             this.map[x] = new Array(height);
             for (var y = 0; y < height; y++) {
-                console.log(distribution)
                 this.map[x][y] = this.distribution.pickRandom().height;
             }
         }

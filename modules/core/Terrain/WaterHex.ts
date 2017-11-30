@@ -6,6 +6,7 @@ class WaterHex extends Hex{
     public static height: number = 1;
     public static renderheight: number = 1;
     public static terrainName:string = "water"
+    public TerrainName = ():string => {return WaterHex.terrainName}
 }
 
 export {WaterHex}

@@ -29,7 +29,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": MountainHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), MountainHex.height, 6),
+            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), MountainHex.renderheight, 6),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron, size: 2 }, scene);
@@ -43,7 +43,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": WaterHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), WaterHex.height, 6),
+            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), WaterHex.renderheight, 6),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron, size: 2 }, scene);
@@ -58,7 +58,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": FlatlandHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), FlatlandHex.height, 6),
+            "vertex": MeshFactory.genpolygon(MeshFactory.hR(), FlatlandHex.renderheight, 6),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron, size: 2 }, scene);

@@ -22,7 +22,6 @@ export class Distribution {
 
     pickRandom(): ITerrain{
         var terrain = this.distribution[Math.round((this.distribution.length - 1 )* Math.random()) ]
-        if(terrain == undefined) {console.error(terrain)}
         return terrain 
     }
     

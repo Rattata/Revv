@@ -104,7 +104,7 @@ export class Game {
             .noise(3, 3, distribution, 0.5)
             // .smooth(0.2)
             .build();
-            console.log(mapped)
+            
             var map3 = new Map(mapped)
         var map2 = new Array();
         for (var i = 0; i < mapped.length; i++) {

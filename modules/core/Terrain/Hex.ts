@@ -4,6 +4,8 @@ export class Hex {
     public _R : number;
     public _S : number;
     
+    public TerrainName = ():string => {return undefined}
+
     constructor(Q? : number, R? : number, _S? : number) {
         this._Q = Q
         this._R = R

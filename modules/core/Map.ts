@@ -22,7 +22,6 @@ export class Map {
                 
                 //vertical
                 var Q = y
-                console.log([R,Q])
                 var tempHex = undefined
                 
                 switch (heightmap[x][y]){
@@ -50,6 +49,7 @@ export class Map {
         
     }
 
+    getMap = () : Array<Array<Hex>> => {return this.map}
 
 
     static Serialize(): string {
