@@ -7,6 +7,7 @@ import { interfaces } from "inversify/dts/interfaces/interfaces";
 import { MeshFactory } from "./Mesh/"
 import { MaterialFactory } from "./Material/MaterialFactory"
 import { GeographyBuilder } from "../core/Generator/GeographyBuilder"
+import { Map } from "../core/Map";
 
 //contains late binding
 export class Game {
@@ -118,6 +119,8 @@ export class Game {
             .noise(3, 3, distribution, 0.5)
             // .smooth(0.2)
             .build();
+            console.log(mapped)
+            var map3 = new Map(mapped)
         var map2 = new Array();
         for (var i = 0; i < mapped.length; i++) {
             map2[i] = new Array()

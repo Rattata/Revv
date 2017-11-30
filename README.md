@@ -15,7 +15,7 @@ GUI?
 # TODO
 ------
 1. Rendering loop
-2. Rules client(create, validate) /server(resolve order)
+2. Rules client(create, validate) /server(order, resolve)
 3. Turn system
 4. GUI?
 99. Unfailing map creation through voronoi
