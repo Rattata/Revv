@@ -1,0 +1,7 @@
+TODAY
+Rendering (permeating from logic layer)
+
+
+NEXT
+Turnsystem
+Netcode

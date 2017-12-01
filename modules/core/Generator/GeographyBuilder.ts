@@ -126,13 +126,13 @@ export class GeographyBuilder {
     }
 
     build() {
-        var distributeMap = new Array<Array<number>>(this.map.length);
+        var exportMap = new Array<Array<number>>(this.map.length);
         for (var lx = 0; lx < this.map.length; lx++) {
-            distributeMap[lx] = new Array<number>(this.map[lx].length);
+            exportMap[lx] = new Array<number>(this.map[lx].length);
             for (var ly = 0; ly < this.map[lx].length; ly++) {
-                distributeMap[lx][ly] = Math.round(this.map[lx][ly] / this.lerps)
+                exportMap[lx][ly] = Math.round(this.map[lx][ly] / this.lerps)
             }
         }
-        return distributeMap;
+        return exportMap;
     }
 }

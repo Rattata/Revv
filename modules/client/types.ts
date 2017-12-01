@@ -2,7 +2,8 @@
  
 const TYPES = {
     BabylonEngine: Symbol("BabylonEngine"),
-    Canvas : Symbol("canvas")
+    GameScene: Symbol("GameScene"),
+    Canvas : Symbol("canvas"),
 };
 
 export { TYPES };

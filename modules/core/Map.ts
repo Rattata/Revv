@@ -1,49 +1,48 @@
 import { Hex, MountainHex, WaterHex, FlatlandHex } from './Terrain/'
 import * as _ from "lodash";
 
+/** stores geography data in axial format */
 export class Map {
     private map: Array<Array<Hex>>
     private height: number;
     private width: number;
 
+
+    
     constructor(heightmap: Array<Array<number>>) {
-        this.width = heightmap.length;
-        this.height = heightmap[heightmap.length - 1].length;
-        var deadSquares = this.height / 2;
-        this.map = new Array<Array<Hex>>(this.width + deadSquares)
-        _.fill(this.map,new Array<Hex>(heightmap[0].length));
+        
+        this.map = new Array<Array<Hex>>(heightmap.length)
         for(var x = 0 ; x < heightmap.length ; x++){
-            
+            this.map[x] = new Array();
             for(var y = 0 ; y < heightmap[x].length ; y++){
                 
                 //horizontal
-                var R = -Math.floor(x / 2)+y
-                var Rmap = R + deadSquares
+                var R = -0
+                var Rmap = R
                 
                 //vertical
-                var Q = y
-                var tempHex = undefined
+                var Q = -1
+                var tempHex : Hex = undefined
                 
                 switch (heightmap[x][y]){
                     case 1 : {
-                        tempHex = new WaterHex(Q,R, -Q-R)
+                        tempHex = new WaterHex(Q,R, -Q-R,x,y)
                         break;
                     }
                     case 2: {
-                        tempHex = new FlatlandHex(Q,R, -Q-R)
+                        tempHex = new FlatlandHex(Q,R, -Q-R,x,y)
                         break;
                     }
                     case 3: {
-                        tempHex = new MountainHex(Q,R, -Q-R)
+                        tempHex = new MountainHex(Q,R, -Q-R, x,y)
                         break;
                     }
                     default: {
                         console.error("default fallthrough")
-                        console.error([Q,R])
-
+                        console.error([Q,R, heightmap[x][y]])
                     }
                 }
-                this.map[Rmap][Q] = tempHex;
+                this.map[x][y] = tempHex;
             }
         }
         
