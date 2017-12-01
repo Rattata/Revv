@@ -3,8 +3,8 @@ export class Hex {
     public _Q : number;
     public _R : number;
     public _S : number;
-    private _X : number;
-    private _Y : number;
+    public _X : number;
+    public _Y : number;
     
     public TerrainName = ():string => {return undefined}
 
@@ -18,21 +18,6 @@ export class Hex {
             console.error(this)
             // throw "Violates Q+R+S=0 constraint!"
         }
-    }
-
-    setXY(X:number, Y:number){
-        this._X = X
-        this._Y = Y
-    }
-
-
-    X = () : number => {
-        return this._X
-    }
-
-    
-    Y = () : number => {
-        return this._Y
     }
 
     equals(A, B) {

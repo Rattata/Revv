@@ -5,7 +5,6 @@ import { TYPES } from "./types";
 import { OverviewCamera } from "./input/OverviewCamera"
 import { interfaces } from "inversify/dts/interfaces/interfaces";
 import { MeshFactory } from "./Mesh/"
-import { MaterialFactory } from "./Material/MaterialFactory"
 import { GeographyBuilder } from "../core/Generator/GeographyBuilder"
 import { Map } from "../core/Map";
 import { Distribution } from "../core/Generator/Distribution";
@@ -35,7 +34,7 @@ export class Game {
 
         Game.canvas = canvas
         this.engine = myContainer.get<BABYLON.Engine>(TYPES.BabylonEngine);
-        this.scene = new GameScene(this.engine)
+        this.scene = new GameScene(this.engine, undefined, undefined)
         this.switchScene(this.scene)
     }
 

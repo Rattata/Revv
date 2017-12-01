@@ -1,7 +1,7 @@
 import {Map} from "../../core/Map"
-import {MaterialFactory} from "../Material/"
 import {MeshFactory} from "../Mesh"
 import { WaterHex, FlatlandHex, MountainHex } from "../../core/Terrain";
+import {RenderMountain, RenderWater, RenderFlat} from "./"
 export class RenderMap{
     private map: Map 
     private renderables : Array<BABYLON.InstancedMesh>
@@ -17,11 +17,11 @@ export class RenderMap{
 
     createRenderables = (scene): Array<BABYLON.InstancedMesh> => {
         var flatMesh = MeshFactory.FlatlandMesh(scene)
-        flatMesh.material = MaterialFactory.getFlatlandMaterial(scene);
+        flatMesh.material = RenderFlat.getMaterial(scene);
         var mountainMesh = MeshFactory.MountainMesh(scene)
-        mountainMesh.material = MaterialFactory.getMountainMaterial(scene);
+        mountainMesh.material = RenderMountain.getMaterial(scene);
         var waterMesh = MeshFactory.WaterMesh(scene)
-        waterMesh.material = MaterialFactory.getWaterMaterial(scene);
+        waterMesh.material = RenderWater.getMaterial(scene);
         
         var tempMap = this.map.getMap();
         
@@ -52,11 +52,10 @@ export class RenderMap{
                     }
 
                 }
-                var yOffset = 0
-                // console.log(tempMap[R][Q])
-                if(tempMap[X][Y].X() % 2 == 0){ yOffset = MeshFactory.hexHeight() / 2 }
-                instance.position.x = 1+ tempMap[X][Y].X() * MeshFactory.hexDistance()
-                instance.position.y = 1+tempMap[X][Y].Y() * MeshFactory.hexHeight() + yOffset
+                
+                var yOffset = (tempMap[X][Y]._X & 1) ?  MeshFactory.hexHeight() / 2  : 0;
+                instance.position.x = 1+ tempMap[X][Y]._X * MeshFactory.hexDistance()
+                instance.position.y = 1+tempMap[X][Y]._Y * MeshFactory.hexHeight() + yOffset
                 this.renderables.push(instance)
             }
         }

@@ -1,4 +1,4 @@
 import {PlayerEntity} from "./PlayerEntity"
-class MovableEntity extends PlayerEntity{
+export class MovableEntity extends PlayerEntity{
 
 }

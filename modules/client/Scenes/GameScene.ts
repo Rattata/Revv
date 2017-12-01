@@ -1,20 +1,22 @@
 import {OverviewCamera} from "../input/OverviewCamera"
 import {Clock} from "../Clock"
 import {Map} from "../../core/Map"
+import {Lobby} from "../../core/Lobby"
 import { GeographyBuilder } from "../../core/Generator/GeographyBuilder";
 import { Distribution } from "../../core/Generator/Distribution";
 import { RenderMap } from "../Drawable";
 import { injectable, inject } from "inversify";
 import { TYPES } from "modules/client/types";
-
+import {Turn} from "../../core/State/Turn"
+import { IPlayer } from "modules/core/IPlayer";
 export class GameScene extends BABYLON.Scene {
     
     private clock: Clock
     private camera: BABYLON.FreeCamera
     private userInput: OverviewCamera
-    private turn : number = 0
+    private turn : Turn
     
-    constructor(engine: BABYLON.Engine) {
+    constructor(engine: BABYLON.Engine, Lobby: Lobby, Player: IPlayer) {
         super(engine);
         //camera stuff
         this.clock = new Clock()
@@ -26,11 +28,11 @@ export class GameScene extends BABYLON.Scene {
         //light 
         var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), this);
         
-        //input stuff
+        //input attachment
         this.userInput = new OverviewCamera(this.camera)
         this.camera.inputs.attachInput(this.userInput)
 
-        // map stuff
+        // map generation
         var distribution = new Distribution();
         var generatedGeography = new GeographyBuilder(26, 26, distribution)
         .noise(4, 4)
@@ -39,15 +41,14 @@ export class GameScene extends BABYLON.Scene {
         .noise(3, 3)
         // .smooth(0.2)
         .build();
-        // console.log(generatedGeography)
+        
         var hexMap = new Map(generatedGeography)
-        console.log(hexMap)
-        // console.log(hexMap)
+        
         var renderMap = new RenderMap(hexMap)
-        // console.log(renderMap)
         renderMap.createRenderables(this);
 
         super.registerAfterRender(() => {
+            //update countdown timer
             var delta = this.clock.getDelta();
             var move = 0;
             this.userInput.checkInputs()
