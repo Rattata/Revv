@@ -1,5 +1,6 @@
+import {Entity} from "../Entity"
 export interface ITerrain {
-    color : string
-    height : number
-    name : string
+    TerrainName() : string
+    container : Array<Entity>
+    height():number
 }

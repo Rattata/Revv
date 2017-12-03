@@ -1,10 +1,28 @@
 import {MountainHex} from "../../core/Terrain/MountainHex"
-export class RenderMountain extends MountainHex {
-    constructor(hex:MountainHex){
+import { IRenderTerrain } from "./IRenderTerrain";
+import { Hex } from "../../core/Terrain";
+import { MeshFactory } from "../../client/Mesh";
+
+export class RenderMountain extends MountainHex implements IRenderTerrain{
+    
+    public mesh : BABYLON.InstancedMesh
+    public hex : Hex
+
+    constructor(hex:Hex, mesh: BABYLON.InstancedMesh){
         super(hex._Q, hex._S,hex._S, hex._X, hex._Y)
+        this.hex = hex
+        this.mesh = mesh
     }
 
-    public static height : number = 5;
+    getMesh(){
+        return this.mesh
+    }
+
+    getHex(){
+        return this as Hex
+    }
+
+    public static RenderHeight : number = 5;
     public static diffuseColor : BABYLON.Color3 = BABYLON.Color3.FromHexString("#BA4A00");
     public static specularColor : BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);
     public static emissiveColor : BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);

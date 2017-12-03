@@ -1,7 +1,24 @@
 import {WaterHex} from "../../core/Terrain/WaterHex"
-export class RenderWater extends WaterHex {
-    constructor(hex:WaterHex){
+import { Hex } from "../../core/Terrain";
+import { IRenderTerrain } from "./IRenderTerrain";
+
+export class RenderWater extends WaterHex implements IRenderTerrain {
+    
+    public mesh : BABYLON.InstancedMesh
+    public hex : Hex
+
+    constructor(hex:Hex, mesh: BABYLON.InstancedMesh){
         super(hex._Q, hex._S,hex._S, hex._X, hex._Y)
+        this.hex = hex
+        this.mesh = mesh
+    }
+
+    getMesh(){
+        return this.mesh
+    }
+
+    getHex(){
+        return this as Hex
     }
 
     public static height : number = 1;

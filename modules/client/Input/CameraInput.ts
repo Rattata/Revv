@@ -1,15 +1,20 @@
-export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
+import {ISelectable} from "./ISelectable"
+export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     // the input manager will fill the parent camera
     camera: BABYLON.FreeCamera;
     private _keys = new Array();
+    private _mouse : MouseEvent = undefined 
+
     private _scrolls = new Array();
     private _onKeyUp: any;
     private _onKeyDown: any;
     private _onScroll: any;
+    private _onClick: any;
     private _engine: BABYLON.Engine;
     private _scene: BABYLON.Scene;
     
-    
+    private Selected : ISelectable
+
     public keysUp =  [87];
     public keysDown = [83];
     public keysLeft = [65];
@@ -66,11 +71,17 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
             };
             this._onScroll = function(evt: WheelEvent){
                 _this._scrolls.push(evt.wheelDelta)
+
+            }
+
+            this._onClick = function(click: MouseEvent){
+                _this._mouse = click
             }
 
             window.addEventListener("keydown", this._onKeyDown, false);
             window.addEventListener("keyup", this._onKeyUp, false);
             window.addEventListener("wheel", this._onScroll, false);
+            window.addEventListener("click", this._onClick, false);
             // BABYLON.Tools.RegisterTopRootEvents([
             //     { name: "blur", handler: this._onLostFocus }
             // ]);
@@ -83,6 +94,7 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
             window.removeEventListener("keydown", this._onKeyDown)
             window.removeEventListener("keyup", this._onKeyUp)
             window.removeEventListener("wheel", this._onScroll)
+            window.removeEventListener("click", this._onClick)
         }
         this._onKeyDown = null;
         this._onKeyUp = null;
@@ -92,9 +104,22 @@ export class OverviewCamera implements BABYLON.ICameraInput<BABYLON.FreeCamera> 
     //this optional function will get called for each rendered frame, if you want to synchronize your input to rendering,
     //no need to use requestAnimationFrame. It's a good place for applying calculations if you have to
     
-    checkInputs() {
+    customeInputs(scene: BABYLON.Scene) {
         var _this = this
         var movementSpeed = 0.5;
+        if(_this._mouse != undefined){
+            var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+            if(pickResult.hit){
+                console.log(pickResult)
+            }
+            _this._mouse = undefined
+        }
+
+        if(_this.Selected != undefined){
+            _this.Selected.onSelect().capture(_this._keys, _this._mouse)
+            
+        }
+        
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
             if (this.keysLeft.indexOf(keyCode) !== -1) {

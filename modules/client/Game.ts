@@ -2,7 +2,7 @@ import { Clock } from "./Clock"
 import * as Actions from "../core/Actions"
 import { myContainer } from "./inversify.config";
 import { TYPES } from "./types";
-import { OverviewCamera } from "./input/OverviewCamera"
+import { CameraInput } from "./input/CameraInput"
 import { interfaces } from "inversify/dts/interfaces/interfaces";
 import { MeshFactory } from "./Mesh/"
 import { GeographyBuilder } from "../core/Generator/GeographyBuilder"
@@ -23,19 +23,13 @@ export class Game {
         myContainer.bind<BABYLON.Engine>(TYPES.BabylonEngine).toConstantValue(new BABYLON.Engine(canvas, false, null, false));
         myContainer.bind(TYPES.Canvas).toConstantValue(canvas);
         //test websocket upgrade
-        var ws = new WebSocket('ws://localhost:3000/ws');
-        ws.onmessage = function (event: MessageEvent) {
-            console.log(event)
-        };
-        ws.onopen = function (event) {
-            var toSend = new Actions.RegisterAction();
-            ws.send(JSON.stringify(toSend));
-        };
+       
 
         Game.canvas = canvas
         this.engine = myContainer.get<BABYLON.Engine>(TYPES.BabylonEngine);
         this.scene = new GameScene(this.engine, undefined, undefined)
         this.switchScene(this.scene)
+        
     }
 
     switchScene(newScene: BABYLON.Scene) {

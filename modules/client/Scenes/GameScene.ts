@@ -1,20 +1,23 @@
-import {OverviewCamera} from "../input/OverviewCamera"
+import {CameraInput} from "../Input/CameraInput"
 import {Clock} from "../Clock"
 import {Map} from "../../core/Map"
 import {Lobby} from "../../core/Lobby"
 import { GeographyBuilder } from "../../core/Generator/GeographyBuilder";
 import { Distribution } from "../../core/Generator/Distribution";
-import { RenderMap } from "../Drawable";
+import { RenderMap, IRenderTerrain } from "../Drawable";
 import { injectable, inject } from "inversify";
 import { TYPES } from "modules/client/types";
 import {Turn} from "../../core/State/Turn"
 import { IPlayer } from "modules/core/IPlayer";
+import { Hex } from "modules/core/Terrain";
 export class GameScene extends BABYLON.Scene {
     
     private clock: Clock
     private camera: BABYLON.FreeCamera
-    private userInput: OverviewCamera
+    private userInput: CameraInput
     private turn : Turn
+
+    private map : Array<Array<Hex>>
     
     constructor(engine: BABYLON.Engine, Lobby: Lobby, Player: IPlayer) {
         super(engine);
@@ -29,7 +32,7 @@ export class GameScene extends BABYLON.Scene {
         var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), this);
         
         //input attachment
-        this.userInput = new OverviewCamera(this.camera)
+        this.userInput = new CameraInput(this.camera)
         this.camera.inputs.attachInput(this.userInput)
 
         // map generation
@@ -45,13 +48,13 @@ export class GameScene extends BABYLON.Scene {
         var hexMap = new Map(generatedGeography)
         
         var renderMap = new RenderMap(hexMap)
-        renderMap.createRenderables(this);
+        var entities : Array<Array<IRenderTerrain>> = renderMap.createRenderables(this);
 
         super.registerAfterRender(() => {
             //update countdown timer
             var delta = this.clock.getDelta();
             var move = 0;
-            this.userInput.checkInputs()
+            this.userInput.customeInputs(this)
         })
 
         super.registerBeforeRender(() => {
@@ -59,21 +62,5 @@ export class GameScene extends BABYLON.Scene {
         })
     }
 
-    registerEventHandlers = ():void => {
-        
-        // window.addEventListener("click", function (ev) {
-        //     var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-        //     if (pickResult.hit) {
-        //         // ship.position = new BABYLON.Vector3(pickResult.pickedMesh.position.x, pickResult.pickedMesh.position.y, 30)
-        //         // var animationBox = new BABYLON.Animation("myAnimation", "position.x", pickResult.pickedMesh.position.x, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-        //         var height = pickResult.pickedMesh._boundingInfo.boundingBox.maximum.z
-        //         BABYLON.Animation.CreateAndStartAnimation('shipmoveX', ship, 'position.x', 30, 30, ship.position.x, pickResult.pickedMesh.position.x, 0);
-        //         BABYLON.Animation.CreateAndStartAnimation('shipmoveY', ship, 'position.y', 30, 30, ship.position.y, pickResult.pickedMesh.position.y, 0);
-        //         BABYLON.Animation.CreateAndStartAnimation('shipmoveZ', ship, 'position.z', 30, 30, ship.position.z, height + 1, 0);
-        //         // hl.addMesh(ship, BABYLON.Color3.Green());
-
-        //     }
-        // })
-    }
 
 }

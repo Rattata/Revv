@@ -1,8 +1,26 @@
 import {FlatlandHex} from "../../core/Terrain/FlatlandHex"
-export abstract class RenderFlat extends FlatlandHex  {
-    // constructor(hex:FlatlandHex){
-    //     super(hex._Q, hex._S,hex._S, hex._X, hex._Y)
-    // }
+import { Hex } from "../../core/Terrain";
+import { ITerrain } from "modules/core/Terrain/ITerrain";
+export class RenderFlat extends FlatlandHex  implements ITerrain{
+   
+    public mesh : BABYLON.InstancedMesh
+    public hex : Hex
+    
+
+    constructor(hex:Hex, mesh: BABYLON.InstancedMesh){
+        super(hex._Q, hex._S,hex._S, hex._X, hex._Y)
+        this.hex = hex
+        this.mesh = mesh
+    }
+
+    getMesh(){
+        return this.mesh
+    }
+
+    getHex(){
+        return this as Hex
+    }
+
     public static height : number = 2;
     public static diffuseColor : BABYLON.Color3 = BABYLON.Color3.FromHexString("#DAF7A6");
     public static specularColor : BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);

@@ -1,4 +1,5 @@
 import { WaterHex, MountainHex, FlatlandHex } from "../../core/Terrain"
+import { RenderFlat, RenderWater, RenderMountain } from "../Drawable";
 export class MeshFactory {
 
     public static hexRadius: () => number  = () => {return 1};
@@ -21,7 +22,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": MountainHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), MountainHex.RenderHeight),
+            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), RenderMountain.height),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron}, scene);
@@ -34,7 +35,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": WaterHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), WaterHex.RenderHeight),
+            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), RenderWater.height),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron}, scene);
@@ -49,7 +50,7 @@ export class MeshFactory {
         var polyhedron = {
             "name": FlatlandHex.terrainName,
             "category": ["Prism"],
-            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), FlatlandHex.RenderHeight),
+            "vertex": MeshFactory.createHexPrism(MeshFactory.hexRadius(), RenderFlat.height),
             "face": [[2, 3, 1, 0], [4, 5, 3, 2], [6, 7, 5, 4], [8, 9, 7, 6], [10, 11, 9, 8], [0, 1, 11, 10], [10, 8, 6, 4, 2, 0], [1, 3, 5, 7, 9, 11]]
         }
         var polygon = BABYLON.MeshBuilder.CreatePolyhedron(polyhedron.name, { custom: polyhedron}, scene);
