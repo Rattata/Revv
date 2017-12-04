@@ -1,12 +1,12 @@
-import {WaterHex, MountainHex, FlatlandHex} from "../Terrain"
+import {WaterTerrain, MountainTerrain, FlatlandTerrain} from "../Terrain"
 import { ITerrain } from "../Terrain/ITerrain";
 export class Distribution {
     distribution: Array<any>
     
     constructor(){
-        var water = [20, WaterHex];
-        var flatland = [3, FlatlandHex];
-        var mountain = [20, MountainHex];
+        var water = [20, WaterTerrain];
+        var flatland = [3, FlatlandTerrain];
+        var mountain = [20, MountainTerrain];
         var predist = [water, flatland, mountain]
 
         this.distribution = this.fillDistribution(predist);

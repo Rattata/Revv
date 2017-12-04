@@ -1,5 +1,5 @@
 import {Distribution} from "./Distribution"
-import { Hex, WaterHex } from "modules/core/Terrain";
+import { Hex} from "modules/core/Terrain";
 export class GeographyBuilder {
 
     width: number = undefined;
@@ -23,7 +23,7 @@ export class GeographyBuilder {
             this.map[x] = new Array(height);
             for (var y = 0; y < height; y++) {
                 this.map[x][y] = this.distribution.pickRandom().height;
-                console.log(this.distribution.pickRandom().height)
+                // console.log(this.distribution.pickRandom().height)
             }
         }
     }

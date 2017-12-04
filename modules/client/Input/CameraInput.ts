@@ -1,9 +1,15 @@
-import {ISelectable} from "./ISelectable"
+import { IInputContext } from "./"
+import { GameScene } from "../Scenes";
+import { KEYMAP } from "./KeyMap"
+import * as _ from "lodash"
+import { ClientShip } from "../Entity";
+import { IRenderTerrain } from "modules/client/Drawable";
+import { Entity } from "modules/core/Entity";
 export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     // the input manager will fill the parent camera
     camera: BABYLON.FreeCamera;
     private _keys = new Array();
-    private _mouse : MouseEvent = undefined 
+    private _mouse: Array<MouseEvent> = new Array<MouseEvent>()
 
     private _scrolls = new Array();
     private _onKeyUp: any;
@@ -11,15 +17,15 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     private _onScroll: any;
     private _onClick: any;
     private _engine: BABYLON.Engine;
-    private _scene: BABYLON.Scene;
-    
-    private Selected : ISelectable
+    private _scene: GameScene;
 
-    public keysUp =  [87];
-    public keysDown = [83];
-    public keysLeft = [65];
-    public keysRight = [68];
-    
+    private Selected: IInputContext = undefined
+    private ship: ClientShip
+    public keysUp = [KEYMAP.W];
+    public keysDown = [KEYMAP.S];
+    public keysLeft = [KEYMAP.A];
+    public keysRight = [KEYMAP.D];
+
 
     //this function must return the type name of the camera, it could be used for serializing your scene
     public getTypeName() { return "inputHandler" };
@@ -28,11 +34,12 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     //for example "mouse" will turn into camera.inputs.attached.mouse
     public getSimpleName() { return "inputHandler" }
 
-    constructor(camera: BABYLON.FreeCamera){
+    constructor(camera: BABYLON.FreeCamera, gameScene: GameScene) {
         this.camera = camera;
+        this._scene = gameScene
         this._keys = new Array();
         this._scrolls = new Array();
-        this.keysUp =  [87];
+        this.keysUp = [87];
         this.keysDown = [83];
         this.keysLeft = [65];
         this.keysRight = [68];
@@ -41,13 +48,14 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     //this function must activate your input, event if your input does not need a DOM element
     attachControl(element: HTMLElement, noPreventDefault?: boolean) {
         var _this = this;
-        
+
         // this._scene = this.camera.getScene();
         // this._engine = this._scene.getEngine();
-        
+
         if (!(this as any)._onKeyDown) {
             // element.tabIndex = 1;
             this._onKeyDown = function (evt) {
+                console.log(evt)
                 if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode);
                     if (index === -1) {
@@ -59,7 +67,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 }
             };
             this._onKeyUp = function (evt) {
-                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1|| _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
+                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode);
                     if (index >= 0) {
                         _this._keys.splice(index, 1);
@@ -69,13 +77,13 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                     }
                 }
             };
-            this._onScroll = function(evt: WheelEvent){
+            this._onScroll = function (evt: WheelEvent) {
                 _this._scrolls.push(evt.wheelDelta)
 
             }
 
-            this._onClick = function(click: MouseEvent){
-                _this._mouse = click
+            this._onClick = function (click: MouseEvent) {
+                _this._mouse.push(click)
             }
 
             window.addEventListener("keydown", this._onKeyDown, false);
@@ -103,43 +111,70 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
 
     //this optional function will get called for each rendered frame, if you want to synchronize your input to rendering,
     //no need to use requestAnimationFrame. It's a good place for applying calculations if you have to
-    
-    customeInputs(scene: BABYLON.Scene) {
-        var _this = this
-        var movementSpeed = 0.5;
-        if(_this._mouse != undefined){
-            var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-            if(pickResult.hit){
-                console.log(pickResult)
-            }
-            _this._mouse = undefined
-        }
 
-        if(_this.Selected != undefined){
-            _this.Selected.onSelect().capture(_this._keys, _this._mouse)
-            
+    customInputs(scene: GameScene) {
+        var _this = this
+
+        var movementSpeed = 0.5;
+
+
+        for(var index = 0 ;index < _this._mouse.length; index++){
+            var mouseEvent: MouseEvent = _this._mouse[index]
+            console.log(mouseEvent)
+            if (_this.Selected == undefined || !_this.Selected.captureMouse(mouseEvent)) {
+                var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+                if (pickResult.hit) {
+                    var meshID = pickResult.pickedMesh.id
+                    var container = scene.getEntityMap().get(meshID).getHex().container
+                    container.forEach(function(ob:any){
+                        if(ob.children != undefined){
+                            _this.Selected = ob as IInputContext
+                        }
+                    })
+                    console.log(meshID + " \t" + scene.getEntityMap().get(meshID).getHex().container.length)
+                    // this.moveship(pickResult.pickedMesh.position.x, pickResult.pickedMesh.position.y)
+                }
+            };
         }
-        
+        _this._mouse = new Array<MouseEvent>();
+
+
+
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
+            if (keyCode == KEYMAP.ESCAPE.valueOf()) {
+                _this.Selected = undefined
+            }
+            if (_this.Selected != undefined) {
+                if (_this.Selected.captureKey(_this._keys[index])) continue;
+            }
             if (this.keysLeft.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(movementSpeed,0,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(movementSpeed, 0, 0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(movementSpeed, 0, 0))
             } else if (this.keysDown.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0,-movementSpeed,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(0,-movementSpeed,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0, -movementSpeed, 0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(0, -movementSpeed, 0))
             } else if (this.keysRight.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(-movementSpeed,0,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(-movementSpeed, 0, 0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(-movementSpeed, 0, 0))
             } else if (this.keysUp.indexOf(keyCode) !== -1) {
-                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0,movementSpeed,0))
-                this.camera.position.addInPlace(new BABYLON.Vector3(0,movementSpeed,0))
+                this.camera._currentTarget.addInPlace(new BABYLON.Vector3(0, movementSpeed, 0))
+                this.camera.position.addInPlace(new BABYLON.Vector3(0, movementSpeed, 0))
             }
         }
-        for(var index =0 ; index < this._scrolls.length; index ++){
-            this.camera.position.addInPlace(new BABYLON.Vector3(0,0,-this._scrolls[index]/ 20))
+        for (var index = 0; index < this._scrolls.length; index++) {
+            if (this.Selected == undefined ||
+                this.Selected.captureScroll != undefined &&
+                !this.Selected.captureScroll(this._scrolls[index])) {
+                this.camera.position.addInPlace(new BABYLON.Vector3(0, 0, -this._scrolls[index] / 20))
+            }
         }
         this._scrolls = new Array();
         return
     };
+
+    moveship(x: number, y: number) {
+        this.ship.mesh.position.x = x
+        this.ship.mesh.position.y = y
+    }
 }

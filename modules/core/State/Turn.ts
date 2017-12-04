@@ -1,5 +1,6 @@
-import {IAction, IPlayerAction} from "../Actions"
+import {IAction, PlayerAction} from "../Actions"
 export class Turn{
+    turnID:number
     playerID : string;
-    Actions: Array<IPlayerAction>
+    Actions: Array<PlayerAction>
 }

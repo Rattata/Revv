@@ -10,6 +10,7 @@ import { Map } from "../core/Map";
 import { Distribution } from "../core/Generator/Distribution";
 import { RenderMap } from "./Drawable/"
 import { GameScene } from "./Scenes";
+import "reflect-metadata";
 
 //contains late binding
 export class Game {
@@ -22,9 +23,7 @@ export class Game {
     constructor(canvas: any) {
         myContainer.bind<BABYLON.Engine>(TYPES.BabylonEngine).toConstantValue(new BABYLON.Engine(canvas, false, null, false));
         myContainer.bind(TYPES.Canvas).toConstantValue(canvas);
-        //test websocket upgrade
-       
-
+        
         Game.canvas = canvas
         this.engine = myContainer.get<BABYLON.Engine>(TYPES.BabylonEngine);
         this.scene = new GameScene(this.engine, undefined, undefined)

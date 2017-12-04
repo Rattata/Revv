@@ -1,5 +1,8 @@
 enum ActionType  {
     RegisterAction = 1,
-    UnregisterAction
+    UnregisterAction,
+    MoveAction,
+    TurnAction,
+    PlayerAction
 }
 export {ActionType}

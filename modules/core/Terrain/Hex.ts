@@ -1,3 +1,5 @@
+import { ITerrain } from "modules/core/Terrain/ITerrain";
+
 export class Hex {
     
     public _Q : number;
@@ -6,8 +8,9 @@ export class Hex {
     public _X : number;
     public _Y : number;
     
-    public TerrainName = ():string => {return undefined}
-
+    public container = []
+    public terrainType: ITerrain
+    
     constructor(Q? : number, R? : number, _S? : number, _X?:number, _Y?:number) {
         this._Q = Q
         this._R = R

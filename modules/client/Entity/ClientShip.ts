@@ -1,14 +1,52 @@
-import {MovableEntity} from "../../core/Entity/MovableEntity"
-import { ISelectable } from "../input/ISelectable";
-import { IInputContext } from "modules/client/Input/InputContext";
+import { injectable, inject } from "inversify";
+import { myContainer } from "../inversify.config";
+import { MovableEntity } from "../../core/Entity/MovableEntity"
+import { IInputContext } from "../Input/IInputContext";
+import {IVariableRender, ShipMeshFactory, IRenderTerrain} from "../Drawable"
+import { Hex } from "../../core/Terrain";
+import { TYPES } from "../types";
+import { GameScene } from "../Scenes/GameScene";
 
-class ClientShip extends MovableEntity implements IInputContext {
-        
-    children():Array<IInputContext>{
+export class ClientShip extends MovableEntity implements IInputContext, IVariableRender {
+
+    public mesh: BABYLON.Mesh
+    
+    
+    public gameScene : GameScene
+
+    constructor(location: IRenderTerrain) {
+        super();
+        this.gameScene = myContainer.get<GameScene>(TYPES.GameScene);
+        location.getHex().container.push(this)
+        this.mesh = new ShipMeshFactory().shipMesh(this.gameScene, "test")
+        var hexPosition = location.getMesh(this.gameScene).position
+        this.mesh.position = hexPosition.clone()
+        this.mesh.position.z =  10
+        console.log(this)
+    }
+
+    public setPosition(){
+
+    }
+
+    update(): void {
+
+    }
+
+    children(): Array<IInputContext> {
         return
     }
-    
-    capture(event: Array<any>) : boolean {
+
+    captureMouse(mouseEvent: MouseEvent): boolean {
         return false
     }
+
+    captureKey(keyEvents: Array<number>): boolean {
+        return false
+    }
+    
+    captureScroll?(wheelEvent: WheelEvent): boolean {
+        return false
+    }
+
 }
