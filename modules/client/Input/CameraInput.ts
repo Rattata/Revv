@@ -35,19 +35,15 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     public getSimpleName() { return "inputHandler" }
 
     constructor(camera: BABYLON.FreeCamera, gameScene: GameScene) {
-        this.camera = camera;
+        this.camera = camera
         this._scene = gameScene
-        this._keys = new Array();
-        this._scrolls = new Array();
-        this.keysUp = [87];
-        this.keysDown = [83];
-        this.keysLeft = [65];
-        this.keysRight = [68];
+        this._keys = new Array()
+        this._scrolls = new Array()
     }
 
     //this function must activate your input, event if your input does not need a DOM element
     attachControl(element: HTMLElement, noPreventDefault?: boolean) {
-        var _this = this;
+        var _this = this
 
         // this._scene = this.camera.getScene();
         // this._engine = this._scene.getEngine();
@@ -57,15 +53,16 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
             this._onKeyDown = function (evt) {
                 console.log(evt)
                 if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
-                    var index = _this._keys.indexOf(evt.keyCode);
+                    var index = _this._keys.indexOf(evt.keyCode)
                     if (index === -1) {
-                        _this._keys.push(evt.keyCode);
+                        _this._keys.push(evt.keyCode)
                     }
                     if (!noPreventDefault) {
-                        evt.preventDefault();
+                        evt.preventDefault()
                     }
                 }
-            };
+            }
+
             this._onKeyUp = function (evt) {
                 if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode);
@@ -76,7 +73,8 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                         evt.preventDefault();
                     }
                 }
-            };
+            }
+
             this._onScroll = function (evt: WheelEvent) {
                 _this._scrolls.push(evt.wheelDelta)
 
@@ -115,13 +113,12 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     customInputs(scene: GameScene) {
         var _this = this
 
-        var movementSpeed = 0.5;
-
+        var movementSpeed = 0.5
 
         for(var index = 0 ;index < _this._mouse.length; index++){
             var mouseEvent: MouseEvent = _this._mouse[index]
             console.log(mouseEvent)
-            if (_this.Selected == undefined || !_this.Selected.captureMouse(mouseEvent)) {
+            if (_this.Selected == undefined || !_this.Selected.captureMouse(mouseEvent,_this._scene)) {
                 var pickResult = scene.pick(scene.pointerX, scene.pointerY);
                 if (pickResult.hit) {
                     var meshID = pickResult.pickedMesh.id
@@ -136,9 +133,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 }
             };
         }
-        _this._mouse = new Array<MouseEvent>();
-
-
+        _this._mouse = new Array<MouseEvent>()
 
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
@@ -146,7 +141,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 _this.Selected = undefined
             }
             if (_this.Selected != undefined) {
-                if (_this.Selected.captureKey(_this._keys[index])) continue;
+                if (_this.Selected.captureKey(_this._keys[index],_this._scene)) continue;
             }
             if (this.keysLeft.indexOf(keyCode) !== -1) {
                 this.camera._currentTarget.addInPlace(new BABYLON.Vector3(movementSpeed, 0, 0))
@@ -165,16 +160,11 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
         for (var index = 0; index < this._scrolls.length; index++) {
             if (this.Selected == undefined ||
                 this.Selected.captureScroll != undefined &&
-                !this.Selected.captureScroll(this._scrolls[index])) {
+                !this.Selected.captureScroll(this._scrolls[index],_this._scene)) {
                 this.camera.position.addInPlace(new BABYLON.Vector3(0, 0, -this._scrolls[index] / 20))
             }
         }
-        this._scrolls = new Array();
+        this._scrolls = new Array()
         return
-    };
-
-    moveship(x: number, y: number) {
-        this.ship.mesh.position.x = x
-        this.ship.mesh.position.y = y
     }
 }

@@ -11,7 +11,6 @@ export class ClientShip extends MovableEntity implements IInputContext, IVariabl
 
     public mesh: BABYLON.Mesh
     
-    
     public gameScene : GameScene
 
     constructor(location: IRenderTerrain) {
@@ -37,15 +36,17 @@ export class ClientShip extends MovableEntity implements IInputContext, IVariabl
         return
     }
 
-    captureMouse(mouseEvent: MouseEvent): boolean {
+    captureMouse(mouseEvent: MouseEvent, scene:GameScene): boolean {
+        
+        
         return false
     }
 
-    captureKey(keyEvents: Array<number>): boolean {
+    captureKey(keyEvents: Array<number>, scene:GameScene): boolean {
         return false
     }
     
-    captureScroll?(wheelEvent: WheelEvent): boolean {
+    captureScroll?(wheelEvent: WheelEvent, scene:GameScene): boolean {
         return false
     }
 

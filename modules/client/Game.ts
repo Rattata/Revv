@@ -10,7 +10,6 @@ import { Map } from "../core/Map";
 import { Distribution } from "../core/Generator/Distribution";
 import { RenderMap } from "./Drawable/"
 import { GameScene } from "./Scenes";
-import "reflect-metadata";
 
 //contains late binding
 export class Game {

@@ -7,4 +7,5 @@ export interface IRenderTerrain {
     parentTerrain() : ITerrain
     renderHeight() : number
     getHex(): Hex
+    getEntityIdentifier():string
 }

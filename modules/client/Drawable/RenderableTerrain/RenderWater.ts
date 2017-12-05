@@ -20,6 +20,9 @@ export class RenderWater extends WaterTerrain implements IRenderTerrain {
     public hex: Hex
     getHex():Hex {return this.hex}
 
+    getEntityIdentifier() {
+        return this.hex.entityID
+    }
 
     private createMasterMesh(scene:BABYLON.Scene){
        return MeshFactory.createHexPrism(this.radius,this.renderHeight(), "", scene);

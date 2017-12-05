@@ -1,3 +1,6 @@
-export class Entity{
-    identifier: string
+export abstract class Entity{
+    entityID: string
+    getEntityID():string{
+        return this.entityID
+    }
 }

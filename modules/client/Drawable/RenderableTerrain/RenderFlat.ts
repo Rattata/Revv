@@ -1,44 +1,49 @@
 import { Hex, FlatlandTerrain, ITerrain } from "../../../core/Terrain";
 import { IRenderTerrain } from "./IRenderTerrain"
-import {MeshFactory} from "../../Mesh/MeshFactory"
+import { MeshFactory } from "../../Mesh/MeshFactory"
 
 export class RenderFlat extends FlatlandTerrain implements IRenderTerrain {
 
-    constructor(hex:Hex,scene:BABYLON.Scene){
+    constructor(hex: Hex, scene: BABYLON.Scene) {
         super()
-        if(RenderFlat.material == undefined){
+        if (RenderFlat.material == undefined) {
             RenderFlat.material = this.getMaterial(scene)
         }
-        if(RenderFlat.mastermesh == undefined){
-           RenderFlat.mastermesh = this.createMasterMesh(scene);
-           RenderFlat.mastermesh.material = RenderFlat.material
+        if (RenderFlat.mastermesh == undefined) {
+            RenderFlat.mastermesh = this.createMasterMesh(scene);
+            RenderFlat.mastermesh.material = RenderFlat.material
         }
-        this.mesh = RenderFlat.mastermesh.createInstance(this.TerrainName()+":"+hex._X+":"+hex._Y)
+        this.mesh = RenderFlat.mastermesh.createInstance(this.TerrainName() + ":" + hex._X + ":" + hex._Y)
         this.hex = hex
     }
 
-    private createMasterMesh(scene:BABYLON.Scene){
-        return MeshFactory.createHexPrism(this.radius,this.renderHeight(), "", scene);
-     }
+    private createMasterMesh(scene: BABYLON.Scene) {
+        return MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+    }
+
+
+    getEntityIdentifier() {
+        return this.hex.entityID
+    }
 
     public hex: Hex
-    getHex():Hex {return this.hex}
+    getHex(): Hex { return this.hex }
 
     public static RenderHeight: number = 2;
-    renderHeight():number {return RenderFlat.RenderHeight}
+    renderHeight(): number { return RenderFlat.RenderHeight }
 
-    private static mastermesh : BABYLON.Mesh
-    private mesh : BABYLON.InstancedMesh
-    getMesh(scene:BABYLON.Scene){
+    private static mastermesh: BABYLON.Mesh
+    private mesh: BABYLON.InstancedMesh
+    getMesh(scene: BABYLON.Scene) {
         return this.mesh
     }
 
-    
+
     public static parentTerrain: ITerrain
     parentTerrain(): ITerrain {
         return RenderFlat.parentTerrain
     }
-    
+
     public static diffuseColor: BABYLON.Color3 = BABYLON.Color3.FromHexString("#DAF7A6");
     public static specularColor: BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);
     public static emissiveColor: BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);
@@ -60,6 +65,6 @@ export class RenderFlat extends FlatlandTerrain implements IRenderTerrain {
 
 
 
-   
+
 
 }

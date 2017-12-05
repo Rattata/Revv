@@ -1,6 +1,7 @@
-import { ITerrain } from "modules/core/Terrain/ITerrain";
+import { ITerrain } from "../Terrain/ITerrain";
+import { Entity } from "../../core/Entity";
 
-export class Hex {
+export class Hex extends Entity{
     
     public _Q : number;
     public _R : number;
@@ -8,10 +9,11 @@ export class Hex {
     public _X : number;
     public _Y : number;
     
-    public container = []
+    public container : Array<Entity> = new Array<Entity>()
     public terrainType: ITerrain
     
     constructor(Q? : number, R? : number, _S? : number, _X?:number, _Y?:number) {
+        super();
         this._Q = Q
         this._R = R
         this._S = -Q - R

@@ -2,7 +2,11 @@ import * as GameMap from "../../core/Map"
 import {MeshFactory} from "../Mesh"
 import { WaterTerrain, FlatlandTerrain, MountainTerrain, Hex } from "../../core/Terrain";
 import {RenderMountain, RenderWater, RenderFlat, IRenderTerrain} from "./"
-import { ITerrain } from "modules/core/Terrain/ITerrain";
+import { ITerrain } from "../../core/Terrain/ITerrain";
+import {injectable, inject} from "inversify"
+import { TYPES } from "../types";
+import { Entity } from "../../core/Entity";
+
 export class RenderMap{
     private map:GameMap.Map
     private entityMap : Map<string,IRenderTerrain>
@@ -12,6 +16,9 @@ export class RenderMap{
        this.createEntityMap(scene)
     }
     
+    @inject(TYPES.EntityRegister)
+    private entityRegister : Map<object, Entity>
+
     getMap = ():GameMap.Map=> {return this.map}
     getEntityMap = (): Map<string,IRenderTerrain>=> {return this.entityMap}
     getEntityArray= ():Array<Array<IRenderTerrain>>=> {return this.entityArray}
