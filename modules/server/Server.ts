@@ -37,7 +37,7 @@ function ws() {
   var router = myContainer.get<ActionRouter>(TYPES.ActionRouter);
 
   app.use('/', express.static("./dist/app/"));
-  (app as expressUws).ws('/ws', function (ws, req) {
+  (app as expressUws).ws('/ws/:gameID', function (ws, req) {
     ws.on('message', function (msg) {
       router.route(msg, ws);
     });

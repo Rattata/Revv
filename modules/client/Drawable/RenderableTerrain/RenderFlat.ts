@@ -18,7 +18,9 @@ export class RenderFlat extends FlatlandTerrain implements IRenderTerrain {
     }
 
     private createMasterMesh(scene: BABYLON.Scene) {
-        return MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+        var mastermesh =  MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+        mastermesh.setEnabled(false)
+        return mastermesh
     }
 
     public static RenderHeight: number = 2;

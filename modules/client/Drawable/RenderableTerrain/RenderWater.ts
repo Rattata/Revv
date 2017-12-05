@@ -27,8 +27,10 @@ export class RenderWater extends WaterTerrain implements IRenderTerrain {
     public static bumpTextureURL: string = "/res/n_ripple.png";
     public static material: BABYLON.Material
 
-    private createMasterMesh(scene: BABYLON.Scene) {
-        return MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+    private createMasterMesh(scene: BABYLON.Scene) :BABYLON.Mesh {
+        var mastermesh  = MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+        mastermesh.setEnabled(false)
+        return mastermesh
     }
 
     renderHeight(): number { return RenderWater.RenderHeight }

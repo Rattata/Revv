@@ -27,8 +27,10 @@ export class RenderMountain extends MountainTerrain implements IRenderTerrain {
     public static ambientColor: BABYLON.Color3 = new BABYLON.Color3(0, 0, 0);
     public static bumpTextureURL: string = "/res/n_rock.jpg";
 
-    private createMasterMesh(scene: BABYLON.Scene) {
-        return MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+    private createMasterMesh(scene: BABYLON.Scene) :BABYLON.Mesh {
+        var mastermesh  = MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
+        mastermesh.setEnabled(false)
+        return mastermesh
     }
 
     renderHeight(): number { return RenderMountain.RenderHeight }

@@ -31,13 +31,10 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
         var positions = MeshFactory.HexPosition_to_screenPosition(X == undefined ? 0 : X, Y == undefined ? 0 : Y)
         this.mesh.position.x = positions[0]
         this.mesh.position.y = positions[1]
-        this.mesh.position.z =  10
-        console.log(this)
-    }
-
-    public setPosition(){
+        this.mesh.position.z =  6
 
     }
+
 
     update(): void {
 

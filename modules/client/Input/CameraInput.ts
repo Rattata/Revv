@@ -7,7 +7,7 @@ import {inject, injectable} from "inversify"
 import {TYPES} from "../../core/types"
 import { EntityRegister } from "../../core/EntityRegister";
 import {IHexType} from "../../core/Entity"
-import { IHasMesh } from "Drawable";
+import { IHasMesh, IHasInstancedMesh } from "Drawable";
 
 @injectable()
 export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
@@ -130,8 +130,13 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 if (pickResult.hit) {
                     var meshID = pickResult.pickedMesh.id
                     var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
+                    
                     if((<IHasMesh>entity).getMesh){
                         scene._highlight.addMesh(entity.mesh,new BABYLON.Color3(0,0,255))
+                    }
+
+                    if((<IHasInstancedMesh>entity).getInstancedMesh){
+                        
                     }
                 }
             };
