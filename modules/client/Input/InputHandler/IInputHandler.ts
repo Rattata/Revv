@@ -1,4 +1,4 @@
-import { GameScene } from "modules/client/Scenes/GameScene";
+import { GameScene } from "../../Scenes/GameScene";
 
 export interface IInputHandler{
     handleMouse?(mouseEvent:MouseEvent, scene:GameScene)

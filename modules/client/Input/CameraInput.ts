@@ -1,16 +1,21 @@
-import { IInputContext } from "./"
+import { IInputContext, IInfo } from "./"
 import { GameScene } from "../Scenes";
 import { KEYMAP } from "./KeyMap"
 import * as _ from "lodash"
 import { ClientShip } from "../Entity";
-import { IRenderTerrain } from "modules/client/Drawable";
-import { Entity } from "modules/core/Entity";
+import {inject, injectable} from "inversify"
+import {TYPES} from "../../core/types"
+import { EntityRegister } from "../../core/EntityRegister";
+import {IHexType} from "../../core/Entity"
+import { IHasMesh } from "Drawable";
+
+@injectable()
 export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     // the input manager will fill the parent camera
     camera: BABYLON.FreeCamera;
     private _keys = new Array();
     private _mouse: Array<MouseEvent> = new Array<MouseEvent>()
-
+    @inject(TYPES.EntityRegister) private _EntityRegister: EntityRegister;
     private _scrolls = new Array();
     private _onKeyUp: any;
     private _onKeyDown: any;
@@ -20,6 +25,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     private _scene: GameScene;
 
     private Selected: IInputContext = undefined
+    private Info: IInfo = undefined
     private ship: ClientShip
     public keysUp = [KEYMAP.W];
     public keysDown = [KEYMAP.S];
@@ -34,9 +40,10 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     //for example "mouse" will turn into camera.inputs.attached.mouse
     public getSimpleName() { return "inputHandler" }
 
-    constructor(camera: BABYLON.FreeCamera, gameScene: GameScene) {
+    constructor(@inject(TYPES.Camera) camera: BABYLON.FreeCamera, @inject(TYPES.GameScene) gameScene: GameScene, @inject(TYPES.EntityRegister) EntityRegister: EntityRegister) {
         this.camera = camera
         this._scene = gameScene
+        this._EntityRegister = EntityRegister
         this._keys = new Array()
         this._scrolls = new Array()
     }
@@ -122,7 +129,10 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 var pickResult = scene.pick(scene.pointerX, scene.pointerY);
                 if (pickResult.hit) {
                     var meshID = pickResult.pickedMesh.id
-                    scene.getMeshByID(meshID).name
+                    var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
+                    if((<IHasMesh>entity).getMesh){
+                        scene._highlight.addMesh(entity.mesh,new BABYLON.Color3(0,0,255))
+                    }
                 }
             };
         }

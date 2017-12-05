@@ -1,5 +1,6 @@
 import {Distribution} from "./Distribution"
-import { Hex} from "modules/core/Terrain";
+import { Hex} from "../Terrain";
+
 export class GeographyBuilder {
 
     width: number = undefined;

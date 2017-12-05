@@ -6,12 +6,13 @@ import { GeographyBuilder } from "../../core/Generator/GeographyBuilder";
 import { Distribution } from "../../core/Generator/Distribution";
 import { RenderMap, IRenderTerrain, ShipMeshFactory } from "../Drawable";
 import { injectable, inject } from "inversify";
-import { TYPES } from "../types";
+import { TYPES } from "../../core/types";
 import {Turn} from "../../core/State/Turn"
 import { IPlayer } from "../../core/IPlayer";
 import { Hex } from "../../core/Terrain";
 import { myContainer } from "../inversify.config";
 import {EntityRegister} from "../../core/EntityRegister"
+import { ClientShip } from "../Entity/ClientShip";
 
 export class GameScene extends BABYLON.Scene {
     
@@ -19,12 +20,8 @@ export class GameScene extends BABYLON.Scene {
     private camera: BABYLON.FreeCamera
     private userInput: CameraInput
     private turn : Turn
-
+    
     private _this : GameScene
-    private entityMap : Map<string,IRenderTerrain>
-    getEntityMap() : Map<string,IRenderTerrain> {return this.entityMap}
-    private entityArray : Array<Array<IRenderTerrain>>
-
     private entityRegister : EntityRegister
 
     private terrainSlots : Map<number,Hex>
@@ -34,6 +31,7 @@ export class GameScene extends BABYLON.Scene {
     private mapHeight: number = 26;
 
     private map : Array<Array<Hex>>
+    public _highlight : BABYLON.HighlightLayer
     
     constructor(engine: BABYLON.Engine, Lobby: Lobby, Player: IPlayer) {
         super(engine);
@@ -42,18 +40,23 @@ export class GameScene extends BABYLON.Scene {
 
         this.entityRegister = new EntityRegister(this.mapWidth, this.mapHeight)
         myContainer.bind<EntityRegister>(TYPES.EntityRegister).toConstantValue(this.entityRegister)
-        //camera stuff
+        myContainer.bind<CameraInput>(TYPES.CameraInput).to(CameraInput)
+        //camera
         this.clock = new Clock()
         this.camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, 100), this)
+        myContainer.bind<BABYLON.FreeCamera>(TYPES.Camera).toConstantValue(this.camera)
         var target = new BABYLON.Vector3(0, 0, 0);
         this.camera.setTarget(target)
 
+        //highlight
+        this._highlight = new BABYLON.HighlightLayer("hl1", this);
+        
 
         //light 
         var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), this);
         
         //input attachment
-        this.userInput = new CameraInput(this.camera, this._this)
+        this.userInput = myContainer.get<CameraInput>(TYPES.CameraInput)
         this.camera.inputs.attachInput(this.userInput)
 
         // map generation
@@ -70,6 +73,7 @@ export class GameScene extends BABYLON.Scene {
         
         this.renderMap = new RenderMap(this.hexMap,this)
         
+        var testShip = new ClientShip(5,5);
         
         super.registerAfterRender(() => {
             var delta = this.clock.getDelta();

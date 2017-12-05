@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {TYPES} from "./types"
+import {TYPES} from "../core/types"
 import { Container } from "inversify";
 import {GameScene} from "./Scenes/GameScene"
 import { interfaces } from "inversify/dts/interfaces/interfaces";

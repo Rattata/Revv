@@ -4,7 +4,7 @@ import { WaterTerrain, FlatlandTerrain, MountainTerrain, Hex } from "../../core/
 import { RenderMountain, RenderWater, RenderFlat, IRenderTerrain } from "./"
 import { ITerrain } from "../../core/Terrain/ITerrain";
 import { injectable, inject } from "inversify"
-import { TYPES } from "../types";
+import { TYPES } from "../../core/types";
 import { Entity } from "../../core/Entity";
 import { EntityRegister } from "../../core/EntityRegister";
 import { RenderHex } from "./RenderHex";

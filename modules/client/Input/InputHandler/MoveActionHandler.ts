@@ -1,7 +1,8 @@
 import {IInputHandler} from "./IInputHandler"
 import { GameScene } from "../../Scenes/GameScene";
 import * as _ from "lodash"
-import { Entity } from "modules/core/Entity";
+import { Entity } from "../../../core/Entity";
+
 export class MoveActionHandler implements IInputHandler{
     
     handleMouse(mouseEvent:MouseEvent, scene:GameScene){

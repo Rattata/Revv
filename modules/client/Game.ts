@@ -1,7 +1,7 @@
 import { Clock } from "./Clock"
 import * as Actions from "../core/Actions"
 import { myContainer } from "./inversify.config";
-import { TYPES } from "./types";
+import { TYPES } from "../core/types";
 import { CameraInput } from "./input/CameraInput"
 import { interfaces } from "inversify/dts/interfaces/interfaces";
 import { MeshFactory } from "./Mesh/"
@@ -20,7 +20,7 @@ export class Game {
     quit = false
 
     constructor(canvas: any) {
-        myContainer.bind<BABYLON.Engine>(TYPES.BabylonEngine).toConstantValue(new BABYLON.Engine(canvas, false, null, false));
+        myContainer.bind<BABYLON.Engine>(TYPES.BabylonEngine).toConstantValue(new BABYLON.Engine(canvas, false, { stencil: true }, false));
         myContainer.bind(TYPES.Canvas).toConstantValue(canvas);
         
         Game.canvas = canvas

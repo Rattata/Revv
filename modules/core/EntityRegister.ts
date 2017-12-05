@@ -1,20 +1,20 @@
 import { Entity } from "./Entity"
 import { injectable } from "inversify"
-import { TYPES } from "modules/client/types";
+import { TYPES } from "./types";
 
 @injectable()
 export class EntityRegister {
-    private xyRegister: Map<string, Array<Entity>>
-    private entityRegister: Map<number, Entity>
+    private xyRegister: Map<string, Array<any>>
+    private entityRegister: Map<number, any>
 
     constructor(width: number, height: number) {
-        this.entityRegister = new Map<number, Entity>()
-        this.xyRegister = new Map<string, Array<Entity>>()
+        this.entityRegister = new Map<number, any>()
+        this.xyRegister = new Map<string, Array<any>>()
         if (width != undefined) {
             for (var i = 0; i < width; i++) {
                 for (var j = 0; j < height; j++) {
                     var key = this.createKey(i, j);
-                    this.xyRegister.set(key, new Array<Entity>())
+                    this.xyRegister.set(key, new Array<any>())
                 }
             }
         }
@@ -37,7 +37,7 @@ export class EntityRegister {
     }
 
 
-    public getByEntityID(entityID:number):Entity{
+    public getByEntityID(entityID:number):any{
         return this.entityRegister.get(entityID);
     }
 

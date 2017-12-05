@@ -1,28 +1,31 @@
-import { injectable, inject } from "inversify";
+
 import { myContainer } from "../inversify.config";
 import { IInputContext } from "../Input/IInputContext";
 import {EntityRegister} from "../../core/EntityRegister"
 
-import {IVariableRender, ShipMeshFactory, IRenderTerrain} from "../Drawable"
+import {IHasMesh, ShipMeshFactory, IRenderTerrain} from "../Drawable"
 import { Hex } from "../../core/Terrain";
-import { TYPES } from "../types";
+import { TYPES } from "../../core/types";
 import { GameScene } from "../Scenes/GameScene";
 import { Entity, IMovable } from "../../core/Entity";
 import { MoveAction } from "../../core/Actions";
 import { MeshFactory } from "../Mesh";
 
-export class ClientShip extends Entity implements IInputContext, IVariableRender, IMovable {
+export class ClientShip extends Entity implements IInputContext, IHasMesh, IMovable {
+
 
     public mesh: BABYLON.Mesh
-    
+    getMesh():BABYLON.Mesh{
+        return this.mesh
+    }
     public gameScene : GameScene
-
-    @inject(TYPES.EntityRegister)
+    
     private entityRegister: EntityRegister
 
     constructor(X?:number, Y?:number) {
         super();
         this.gameScene = myContainer.get<GameScene>(TYPES.GameScene);
+        this.entityRegister = myContainer.get<EntityRegister>(TYPES.EntityRegister);
         this.entityRegister.add(X == undefined ? 0 : X, Y == undefined ? 0 : Y, this)
         this.mesh = new ShipMeshFactory().shipMesh(this.gameScene, this.getEntityID().toString())
         var positions = MeshFactory.HexPosition_to_screenPosition(X == undefined ? 0 : X, Y == undefined ? 0 : Y)
