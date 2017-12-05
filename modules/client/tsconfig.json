@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": "../../",
+    "baseUrl": "./",
     "typeRoots": [
       "node_modules/@types",
       "node_modules"
     ],
-    "types": [ "babylonjs", "inversify", "lodash"],
+    // "types": [ "babylonjs", "inversify", "lodash"],
     "target": "es6",
     "lib": [
       "es6",

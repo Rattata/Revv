@@ -1,7 +1,7 @@
 import {Entity} from "../Entity"
 import {BaseTerrain,ITerrain,Hex} from "./"
 
-export class FlatlandTerrain  implements ITerrain{
+export class FlatlandTerrain implements ITerrain{
     
     public static radius : number = 1
     radius():number{return FlatlandTerrain.radius}

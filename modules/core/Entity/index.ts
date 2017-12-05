@@ -1,5 +1,4 @@
-export * from "./MovableEntity"
-export * from "./PlayerEntity"
-export * from "./StaticEntity"
 export * from "./Entity"
 export * from "./Ship"
+export * from "./IHexType"
+export * from "./IMovable"

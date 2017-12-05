@@ -1,6 +1,7 @@
+import {UUID} from "../UUID"
 export abstract class Entity{
-    entityID: string
-    getEntityID():string{
+    entityID: number
+    getEntityID():number{
         return this.entityID
     }
 }

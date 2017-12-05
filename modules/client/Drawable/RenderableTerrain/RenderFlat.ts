@@ -1,47 +1,38 @@
 import { Hex, FlatlandTerrain, ITerrain } from "../../../core/Terrain";
 import { IRenderTerrain } from "./IRenderTerrain"
 import { MeshFactory } from "../../Mesh/MeshFactory"
+import { GameScene } from "../../Scenes/GameScene";
 
 export class RenderFlat extends FlatlandTerrain implements IRenderTerrain {
-
-    constructor(hex: Hex, scene: BABYLON.Scene) {
+    private scene:GameScene
+    constructor(scene: GameScene) {
         super()
+        this.scene = scene
         if (RenderFlat.material == undefined) {
             RenderFlat.material = this.getMaterial(scene)
         }
         if (RenderFlat.mastermesh == undefined) {
             RenderFlat.mastermesh = this.createMasterMesh(scene);
             RenderFlat.mastermesh.material = RenderFlat.material
-        }
-        this.mesh = RenderFlat.mastermesh.createInstance(this.TerrainName() + ":" + hex._X + ":" + hex._Y)
-        this.hex = hex
+        }  
     }
 
     private createMasterMesh(scene: BABYLON.Scene) {
         return MeshFactory.createHexPrism(this.radius, this.renderHeight(), "", scene);
     }
 
-
-    getEntityIdentifier() {
-        return this.hex.entityID
-    }
-
-    public hex: Hex
-    getHex(): Hex { return this.hex }
-
     public static RenderHeight: number = 2;
     renderHeight(): number { return RenderFlat.RenderHeight }
 
     private static mastermesh: BABYLON.Mesh
     private mesh: BABYLON.InstancedMesh
-    getMesh(scene: BABYLON.Scene) {
-        return this.mesh
-    }
-
-
-    public static parentTerrain: ITerrain
-    parentTerrain(): ITerrain {
-        return RenderFlat.parentTerrain
+    getInstancedMesh(scene: BABYLON.Scene, identifier:number) : BABYLON.InstancedMesh {
+        if(this.scene == scene && RenderFlat.mastermesh != undefined){
+            return RenderFlat.mastermesh.createInstance(identifier.toString())
+        } else {
+            this.createMasterMesh(scene)
+            return this.getInstancedMesh(scene, identifier);
+        }
     }
 
     public static diffuseColor: BABYLON.Color3 = BABYLON.Color3.FromHexString("#DAF7A6");

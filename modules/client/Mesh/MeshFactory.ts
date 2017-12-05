@@ -6,6 +6,12 @@ export class MeshFactory {
     public static hexHeight: () => number = () => { return (Math.sqrt(3) / 2 * MeshFactory.hexWidth()) }
     public static hexDistance: () => number = () => { return MeshFactory.hexWidth() * (3 / 4) };
 
+    public static HexPosition_to_screenPosition(X:number, Y:number):number[]{
+        var yOffset = (X & 1) ? MeshFactory.hexHeight() / 2 : 0;
+        return [ 1 + X * MeshFactory.hexDistance(),
+            1 + Y * MeshFactory.hexHeight() + yOffset]
+    }
+
     public static createHexPrism(radius, height, name, scene): BABYLON.Mesh {
         var points = []
         for (var c = 0; c < 6; c++) {

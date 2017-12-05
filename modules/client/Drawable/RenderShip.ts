@@ -1,4 +1,4 @@
-import {MovableEntity, LightShip} from "../../core/Entity"
+import {LightShip} from "../../core/Entity"
 export class RenderShip extends LightShip {
     
 }

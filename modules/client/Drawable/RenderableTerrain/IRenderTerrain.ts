@@ -1,11 +1,7 @@
-import { Hex } from "../../../core/Terrain";
-import { ITerrain } from "modules/core/Terrain/ITerrain";
+import { Hex, ITerrain } from "../../../core/Terrain";
 
-export interface IRenderTerrain {
-    getMesh(scene:BABYLON.Scene) : BABYLON.InstancedMesh
+export interface IRenderTerrain extends ITerrain{
+    getInstancedMesh(scene:BABYLON.Scene, entityID:number) : BABYLON.InstancedMesh
     getMaterial(scene:BABYLON.Scene) : BABYLON.Material
-    parentTerrain() : ITerrain
     renderHeight() : number
-    getHex(): Hex
-    getEntityIdentifier():string
 }

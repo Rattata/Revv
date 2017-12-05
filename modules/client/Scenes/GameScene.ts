@@ -10,8 +10,8 @@ import { TYPES } from "../types";
 import {Turn} from "../../core/State/Turn"
 import { IPlayer } from "../../core/IPlayer";
 import { Hex } from "../../core/Terrain";
-import {ShipFactory} from "../Entity"
 import { myContainer } from "../inversify.config";
+import {EntityRegister} from "../../core/EntityRegister"
 
 export class GameScene extends BABYLON.Scene {
     
@@ -25,9 +25,13 @@ export class GameScene extends BABYLON.Scene {
     getEntityMap() : Map<string,IRenderTerrain> {return this.entityMap}
     private entityArray : Array<Array<IRenderTerrain>>
 
+    private entityRegister : EntityRegister
+
     private terrainSlots : Map<number,Hex>
     private renderMap : RenderMap
     private hexMap : GameMap.Map
+    private mapWidth: number = 26;
+    private mapHeight: number = 26;
 
     private map : Array<Array<Hex>>
     
@@ -35,6 +39,9 @@ export class GameScene extends BABYLON.Scene {
         super(engine);
         this._this = this
         myContainer.bind<BABYLON.Scene>(TYPES.GameScene).toConstantValue(this._this);
+
+        this.entityRegister = new EntityRegister(this.mapWidth, this.mapHeight)
+        myContainer.bind<EntityRegister>(TYPES.EntityRegister).toConstantValue(this.entityRegister)
         //camera stuff
         this.clock = new Clock()
         this.camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, 100), this)
@@ -51,7 +58,7 @@ export class GameScene extends BABYLON.Scene {
 
         // map generation
         var distribution = new Distribution();
-        var generatedGeography = new GeographyBuilder(26, 26, distribution)
+        var generatedGeography = new GeographyBuilder(this.mapWidth, this.mapHeight, distribution)
         .noise(4, 4)
         .noise(7, 7)
         .noise(9, 9)
@@ -62,12 +69,7 @@ export class GameScene extends BABYLON.Scene {
         this.hexMap = new GameMap.Map(generatedGeography)
         
         this.renderMap = new RenderMap(this.hexMap,this)
-        this.entityMap = this.renderMap.getEntityMap()
-        this.entityArray = this.renderMap.getEntityArray()
-        var shipfact = new ShipFactory();
-
-        shipfact.buildTestShip(this.entityArray[5][5],this._this,"test")
-
+        
         
         super.registerAfterRender(() => {
             var delta = this.clock.getDelta();

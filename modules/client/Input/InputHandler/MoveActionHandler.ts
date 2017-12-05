@@ -7,14 +7,11 @@ export class MoveActionHandler implements IInputHandler{
     handleMouse(mouseEvent:MouseEvent, scene:GameScene){
         var pickresult = scene.pick(scene.pointerX, scene.pointerY)
         if(pickresult.hit){
-            var entity = scene.getEntityMap().get(pickresult.pickedMesh.id);
-            var oldhex = entity.getHex();
-            _.findIndex(oldhex.container, function(o:Entity){
-                return entity.getEntityIdentifier() == o.entityID
-            })
+            // var entity = scene.getEntityMap().get(pickresult.pickedMesh.id);
+            // var oldhex = entity.getHex();
+             
             
-            
-            scene.getMeshByID(pickresult.pickedMesh.id)
+            // scene.getMeshByID(pickresult.pickedMesh.id)
 
             
         }

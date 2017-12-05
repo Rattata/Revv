@@ -122,14 +122,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
                 var pickResult = scene.pick(scene.pointerX, scene.pointerY);
                 if (pickResult.hit) {
                     var meshID = pickResult.pickedMesh.id
-                    var container = scene.getEntityMap().get(meshID).getHex().container
-                    container.forEach(function(ob:any){
-                        if(ob.children != undefined){
-                            _this.Selected = ob as IInputContext
-                        }
-                    })
-                    console.log(meshID + " \t" + scene.getEntityMap().get(meshID).getHex().container.length)
-                    // this.moveship(pickResult.pickedMesh.position.x, pickResult.pickedMesh.position.y)
+                    scene.getMeshByID(meshID).name
                 }
             };
         }
