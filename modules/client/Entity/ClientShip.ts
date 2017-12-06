@@ -18,6 +18,7 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
     getMesh():BABYLON.Mesh{
         return this.mesh
     }
+
     public gameScene : GameScene
     
     private entityRegister: EntityRegister
@@ -32,17 +33,36 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
         this.mesh.position.x = positions[0]
         this.mesh.position.y = positions[1]
         this.mesh.position.z =  6
+        this.position[0] = X == undefined ? 0 : X 
+        this.position[1] = Y == undefined ? 0 : Y
 
     }
 
+    private position : number[] = [0,0]
+    getX() : number{
+        return this.position[0]
+    }
+
+    getY() : number{
+        return this.position[1]
+    }
 
     update(): void {
 
     }
 
-    move():MoveAction{
+    getThis():any{
+        return this
+    }
+
+    move(X:number, Y:number):MoveAction{
         return
     }
+
+    getMovedEntity() : Entity {
+        return this
+    }
+
 
     children(): Array<IInputContext> {
         return

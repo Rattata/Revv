@@ -32,7 +32,16 @@ export class GameScene extends BABYLON.Scene {
 
     private map : Array<Array<Hex>>
     public _highlight : BABYLON.HighlightLayer
-    
+    private gameID : string
+    getGameID():string{
+        return this.gameID
+    }
+    getUserID():string{
+        return this.gameID
+    }
+    getTurnID():number{
+        return 1
+    }
     constructor(engine: BABYLON.Engine, Lobby: Lobby, Player: IPlayer) {
         super(engine);
         this._this = this

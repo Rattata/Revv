@@ -1,6 +1,5 @@
 import {ActionType} from "../../core/Actions/ActionTypes";
-interface IAction {
+export interface IAction {
     type: ActionType
+    validate(): boolean
 }
-
-export {IAction}
