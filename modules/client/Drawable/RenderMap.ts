@@ -29,7 +29,6 @@ export class RenderMap {
     private entityRegister: EntityRegister
 
     private createEntityMap = (scene): void => {
-        this.map
         let tempMap = this.map.getMap();
 
         // console.log(tempMap)

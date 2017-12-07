@@ -7,6 +7,7 @@ export abstract class PlayerAction implements IAction {
         this.gameID = gameID
         this.userID= userID
     }
+    
     validate(){
         if(this.type == undefined) return false;
         if(this.gameID == undefined) return false;

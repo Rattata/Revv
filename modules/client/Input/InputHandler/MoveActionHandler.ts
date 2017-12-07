@@ -7,26 +7,29 @@ import { IAction, MoveAction } from "../../../core/Actions/index";
 import { inject } from "inversify";
 import { CLIENT_TYPES } from "../../clienttypes";
 import { ActionBuilder } from "../../Actions/ActionBuilder";
-import { RenderMoveAction } from "Actions/RenderMoveAction";
+import { RenderMoveAction } from "../../Actions/RenderMoveAction";
 import { myContainer } from "inversify.config";
 import { IInputContext } from "Input";
-import { MeshFactory } from "Mesh";
+import { MeshFactory } from "../../Mesh";
+import { injectable } from "inversify";
 
+@injectable()
 export class MoveActionHandler implements IInputHandler {
 
     private movementPointer : BABYLON.Mesh
     private EntityRegister : EntityRegister
-    private movedItem : IInputContext
+    public movedItem : IInputContext
     private action : IAction
     private actionBuilder: ActionBuilder
     private scene : GameScene
 
-    constructor(@inject(CLIENT_TYPES.GameScene) scene : GameScene){
+    constructor(@inject(CLIENT_TYPES.GameScene) scene : GameScene, @inject(CLIENT_TYPES.EntityRegister) entityRegister: EntityRegister){
         this.scene = scene
+        this.EntityRegister = entityRegister
     }
 
     handleMouse(mouseEvent:MouseEvent, scene:GameScene){
-        if(mouseEvent.button != 2) return false;
+        if(mouseEvent.button != 0) return false;
         var pickresult = scene.pick(scene.pointerX, scene.pointerY)
         if(pickresult.hit){
             var target : any = this.EntityRegister.getByEntityID(parseInt(pickresult.pickedMesh.name));
@@ -54,6 +57,10 @@ export class MoveActionHandler implements IInputHandler {
     private createMesh (originX : number, originY: number, targetX: number, targetY : number) : BABYLON.Mesh{
         var height = 6
         var ops = {points: [new BABYLON.Vector3(originX, originY, height), new BABYLON.Vector3(targetX, targetY, height)]}
-        return BABYLON.MeshBuilder.CreateLines("action",ops, this.scene)
+        let tempMesh = BABYLON.MeshBuilder.CreateLines("action",ops, this.scene)
+        let tempMaterial = new BABYLON.StandardMaterial("tempmat",this.scene)
+        tempMaterial.emissiveColor = BABYLON.Color3.Black()
+        tempMesh.material = tempMaterial
+        return tempMesh
     }
 }

@@ -6,9 +6,9 @@
       "node_modules"
     ],
     "types": [ "babylonjs", "inversify", "lodash"],
-    "target": "es6",
+    "target": "es2016",
     "lib": [
-      "es6",
+      "es2016",
       "dom"
     ],
     "module": "es2015",

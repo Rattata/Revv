@@ -25,7 +25,7 @@ export abstract class RenderTerrain{
         // this.render()
     }
 
-    render(){
+    protected render(){
         this.masterMesh = this.createMasterMesh();
         this.material = this.createMaterial();
         this.masterMesh.material = this.material

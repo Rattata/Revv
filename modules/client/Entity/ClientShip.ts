@@ -10,7 +10,7 @@ import { GameScene } from "../Scenes/GameScene";
 import { Entity, IMovable } from "../../core/Entity";
 import { MoveAction } from "../../core/Actions";
 import { MeshFactory } from "../Mesh";
-import { MoveActionHandler } from "Input/InputHandler/MoveActionHandler";
+import { MoveActionHandler } from "../Input/InputHandler";
 
 export class ClientShip extends Entity implements IInputContext, IHasMesh, IMovable {
 
@@ -29,6 +29,8 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
         super();
         this.gameScene = myContainer.get<GameScene>(CLIENT_TYPES.GameScene);
         this.entityRegister = myContainer.get<EntityRegister>(CLIENT_TYPES.EntityRegister);
+        this.moveActionHandler = myContainer.get<MoveActionHandler>(CLIENT_TYPES.MoveActionHandler)
+        this.moveActionHandler.movedItem = this
         this.entityRegister.add(X == undefined ? 0 : X, Y == undefined ? 0 : Y, this)
         this.mesh = new ShipMeshFactory().shipMesh(this.gameScene, this.getEntityID().toString())
         var positions = MeshFactory.HexPosition_to_screenPosition(X == undefined ? 0 : X, Y == undefined ? 0 : Y)
@@ -71,8 +73,7 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
     }
 
     captureMouse(mouseEvent: MouseEvent, scene:GameScene): boolean {
-        // return this.moveActionHandler.handleMouse(mouseEvent, scene);
-        return false
+        return this.moveActionHandler.handleMouse(mouseEvent, scene);
     }
 
     captureKey(keyEvents: Array<number>, scene:GameScene): boolean {

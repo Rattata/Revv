@@ -1,22 +1,25 @@
 import {injectable, inject} from "inversify"
 import { CLIENT_TYPES } from "../clienttypes";
-import { GameScene } from "Scenes/GameScene";
+import { GameScene } from "../Scenes/GameScene";
 import {myContainer} from "../inversify.config"
-import { IAction, IHasTarget } from "../../core/Actions/index";
+import { IAction, IHasTarget, MoveAction } from "../../core/Actions/index";
 import { IHasMesh } from "Drawable";
-import { IHasActionMesh } from "Actions";
+import { IHasActionMesh, RenderMoveAction } from "./";
 
 @injectable()
 export class ActionBuilder {
     private scene : GameScene
-    private constructor(@inject(CLIENT_TYPES.GameScene) scene:GameScene){
+    private constructor( scene:GameScene){
         this.scene = scene
     }
 
-    private action : any
-    static beginMovement() : ActionBuilder{
-        var actionBuilder = myContainer.get<ActionBuilder>(CLIENT_TYPES.ActionBuilder);
+    private setBasics(){}
 
+    public action : any
+    static beginMovement() : ActionBuilder{
+        let gameScene = myContainer.get<GameScene>(CLIENT_TYPES.GameScene);
+        var actionBuilder = new ActionBuilder(gameScene);
+        actionBuilder.action = new RenderMoveAction(gameScene);
         return actionBuilder
     }
 

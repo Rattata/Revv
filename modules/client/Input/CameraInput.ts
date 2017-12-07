@@ -6,7 +6,7 @@ import { ClientShip } from "../Entity";
 import {inject, injectable} from "inversify"
 import {CLIENT_TYPES} from "../clienttypes"
 import { EntityRegister } from "../../core/EntityRegister";
-import {IHexType} from "../../core/Entity"
+import {IHexType, Entity} from "../../core/Entity"
 import { IHasMesh, IHasInstancedMesh } from "Drawable";
 
 @injectable()
@@ -27,6 +27,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     private Selected: IInputContext = undefined
     private Info: IInfo = undefined
     private ship: ClientShip
+    public keysQ = [KEYMAP.Q];
     public keysUp = [KEYMAP.W];
     public keysDown = [KEYMAP.S];
     public keysLeft = [KEYMAP.A];
@@ -59,7 +60,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
             // element.tabIndex = 1;
             this._onKeyDown = function (evt) {
                 // console.log(evt)
-                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
+                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysQ.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode)
                     if (index === -1) {
                         _this._keys.push(evt.keyCode)
@@ -71,7 +72,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
             }
 
             this._onKeyUp = function (evt) {
-                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
+                if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysQ.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode);
                     if (index >= 0) {
                         _this._keys.splice(index, 1);
@@ -127,26 +128,27 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
             // console.log(mouseEvent)
             if (_this.Selected == undefined || !_this.Selected.captureMouse(mouseEvent,_this._scene)) {
                 var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-                // if (pickResult.hit) {
-                //     var meshID = pickResult.pickedMesh.id
-                //     var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
-                    
-                //     if((<IHasMesh>entity).getMesh){
-                //         scene._highlight.addMesh(entity.mesh,new BABYLON.Color3(0,0,255))
-                //     }
-
-                //     if((<IHasInstancedMesh>entity).getInstancedMesh){
+                if (pickResult.hit) {
+                    var meshID = pickResult.pickedMesh.id
+                    var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
+                    if((<IInputContext>entity).getThis)this.select(entity);
+                    if((<IHasMesh>entity).getMesh){
                         
-                //     }
-                // }
+                    }
+
+                    if((<IHasInstancedMesh>entity).getInstancedMesh){
+                        
+                    }
+                }
             };
         }
         _this._mouse = new Array<MouseEvent>()
 
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
+            console.log(keyCode)
             if (keyCode == KEYMAP.Q.valueOf()) {
-                _this.Selected = undefined
+                this.deselect()
             }
             if (_this.Selected != undefined) {
                 if (_this.Selected.captureKey(_this._keys[index],_this._scene)) continue;
@@ -174,5 +176,21 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
         }
         this._scrolls = new Array()
         return
+    }
+
+    select(entity:any){
+        this.Selected = (<IInputContext>entity)
+        if((<IHasMesh>entity).getMesh){
+            this._scene._highlight.addMesh((<IHasMesh>entity).getMesh(), BABYLON.Color3.Blue())
+        }
+    }
+
+    deselect(){
+        let entity = this._EntityRegister.getByEntityID((this.Selected.getThis() as Entity).entityID)
+        if((<IHasMesh> entity).getMesh){
+            let mesh = (<IHasMesh> entity).getMesh()
+            this._scene._highlight.removeMesh(mesh)
+        }
+        this.Selected == undefined
     }
 }

@@ -9,4 +9,5 @@ export const CLIENT_TYPES = {
     RenderWater : Symbol("RenderWater"),
     RenderMountain : Symbol("RenderMountain"),
     RenderFlat : Symbol("RenderFlat"),
+    MoveActionHandler : Symbol("MoveActionHandler"),
 }
