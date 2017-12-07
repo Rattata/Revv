@@ -10,6 +10,6 @@ export class FlatlandTerrain implements ITerrain{
     height():number {
         return FlatlandTerrain.height
     }
-    public static terrainName:string = FlatlandTerrain.name
+    public static terrainName:string = "flat"
     public TerrainName = ():string => {return FlatlandTerrain.terrainName}
 }

@@ -1,5 +1,5 @@
 export enum KEYMAP {
-    ESCAPE = 27,
+    Q = 81,
     W = 87,
     S = 83,
     A = 65,

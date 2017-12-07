@@ -1,5 +1,5 @@
 import {injectable, inject} from "inversify"
-import { TYPES } from "../../core/types";
+import { CLIENT_TYPES } from "../clienttypes";
 import { GameScene } from "Scenes/GameScene";
 import {myContainer} from "../inversify.config"
 import { IAction, IHasTarget } from "../../core/Actions/index";
@@ -9,13 +9,13 @@ import { IHasActionMesh } from "Actions";
 @injectable()
 export class ActionBuilder {
     private scene : GameScene
-    private constructor(@inject(TYPES.GameScene) scene:GameScene){
+    private constructor(@inject(CLIENT_TYPES.GameScene) scene:GameScene){
         this.scene = scene
     }
 
     private action : any
     static beginMovement() : ActionBuilder{
-        var actionBuilder = myContainer.get<ActionBuilder>(TYPES.ActionBuilder);
+        var actionBuilder = myContainer.get<ActionBuilder>(CLIENT_TYPES.ActionBuilder);
 
         return actionBuilder
     }
@@ -40,7 +40,7 @@ export class ActionBuilder {
             var action = (<IHasActionMesh>this.action)
             action.setMesh(mesh)
         }else {
-            console.error("action does not implement IHasTarget iface")
+            console.error("action does not implement IHasMesh iface")
         }
         return this;
     }
@@ -48,6 +48,9 @@ export class ActionBuilder {
     buildEnqueue():boolean{
         if(this.action.validate()){
             //push to actionstack
+        } else {
+            console.error("action failed validation")
+            console.error(this)
         }
         return true;
     }

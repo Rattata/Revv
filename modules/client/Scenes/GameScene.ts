@@ -4,9 +4,9 @@ import * as GameMap from "../../core/Map"
 import {Lobby} from "../../core/Lobby"
 import { GeographyBuilder } from "../../core/Generator/GeographyBuilder";
 import { Distribution } from "../../core/Generator/Distribution";
-import { RenderMap, IRenderTerrain, ShipMeshFactory } from "../Drawable";
+import { RenderMap, ShipMeshFactory } from "../Drawable";
 import { injectable, inject } from "inversify";
-import { TYPES } from "../../core/types";
+import { CLIENT_TYPES } from "../clienttypes";
 import {Turn} from "../../core/State/Turn"
 import { IPlayer } from "../../core/IPlayer";
 import { Hex } from "../../core/Terrain";
@@ -33,6 +33,7 @@ export class GameScene extends BABYLON.Scene {
     private map : Array<Array<Hex>>
     public _highlight : BABYLON.HighlightLayer
     private gameID : string
+
     getGameID():string{
         return this.gameID
     }
@@ -42,18 +43,18 @@ export class GameScene extends BABYLON.Scene {
     getTurnID():number{
         return 1
     }
-    constructor(engine: BABYLON.Engine, Lobby: Lobby, Player: IPlayer) {
+    constructor(engine: BABYLON.Engine) {
         super(engine);
         this._this = this
-        myContainer.bind<BABYLON.Scene>(TYPES.GameScene).toConstantValue(this._this);
+        myContainer.bind<BABYLON.Scene>(CLIENT_TYPES.GameScene).toConstantValue(this._this);
 
         this.entityRegister = new EntityRegister(this.mapWidth, this.mapHeight)
-        myContainer.bind<EntityRegister>(TYPES.EntityRegister).toConstantValue(this.entityRegister)
-        myContainer.bind<CameraInput>(TYPES.CameraInput).to(CameraInput)
+        myContainer.bind<EntityRegister>(CLIENT_TYPES.EntityRegister).toConstantValue(this.entityRegister)
+        myContainer.bind<CameraInput>(CLIENT_TYPES.CameraInput).to(CameraInput)
         //camera
         this.clock = new Clock()
         this.camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, 100), this)
-        myContainer.bind<BABYLON.FreeCamera>(TYPES.Camera).toConstantValue(this.camera)
+        myContainer.bind<BABYLON.FreeCamera>(CLIENT_TYPES.Camera).toConstantValue(this.camera)
         var target = new BABYLON.Vector3(0, 0, 0);
         this.camera.setTarget(target)
 
@@ -65,7 +66,7 @@ export class GameScene extends BABYLON.Scene {
         var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 0, 100), this);
         
         //input attachment
-        this.userInput = myContainer.get<CameraInput>(TYPES.CameraInput)
+        this.userInput = myContainer.get<CameraInput>(CLIENT_TYPES.CameraInput)
         this.camera.inputs.attachInput(this.userInput)
 
         // map generation

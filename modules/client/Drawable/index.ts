@@ -1,6 +1,6 @@
 export * from "./RenderMap"
 export * from "./ShipMeshFactory"
-export * from "./RenderableTerrain/IRenderTerrain"
+export * from "./RenderableTerrain/RenderTerrain"
 export * from "./RenderableTerrain/RenderWater"
 export * from "./RenderableTerrain/RenderMountain"
 export * from "./RenderableTerrain/RenderFlat"

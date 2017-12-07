@@ -5,7 +5,7 @@ import { Entity, IHexType, IMovable, IHasPosition } from "../../../core/Entity";
 import { EntityRegister } from "../../../core/EntityRegister";
 import { IAction, MoveAction } from "../../../core/Actions/index";
 import { inject } from "inversify";
-import { TYPES } from "../../../core/types";
+import { CLIENT_TYPES } from "../../clienttypes";
 import { ActionBuilder } from "../../Actions/ActionBuilder";
 import { RenderMoveAction } from "Actions/RenderMoveAction";
 import { myContainer } from "inversify.config";
@@ -21,7 +21,7 @@ export class MoveActionHandler implements IInputHandler {
     private actionBuilder: ActionBuilder
     private scene : GameScene
 
-    constructor(@inject(TYPES.GameScene) scene : GameScene){
+    constructor(@inject(CLIENT_TYPES.GameScene) scene : GameScene){
         this.scene = scene
     }
 

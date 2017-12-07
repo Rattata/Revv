@@ -4,7 +4,7 @@ import { KEYMAP } from "./KeyMap"
 import * as _ from "lodash"
 import { ClientShip } from "../Entity";
 import {inject, injectable} from "inversify"
-import {TYPES} from "../../core/types"
+import {CLIENT_TYPES} from "../clienttypes"
 import { EntityRegister } from "../../core/EntityRegister";
 import {IHexType} from "../../core/Entity"
 import { IHasMesh, IHasInstancedMesh } from "Drawable";
@@ -15,7 +15,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     camera: BABYLON.FreeCamera;
     private _keys = new Array();
     private _mouse: Array<MouseEvent> = new Array<MouseEvent>()
-    @inject(TYPES.EntityRegister) private _EntityRegister: EntityRegister;
+    @inject(CLIENT_TYPES.EntityRegister) private _EntityRegister: EntityRegister;
     private _scrolls = new Array();
     private _onKeyUp: any;
     private _onKeyDown: any;
@@ -40,7 +40,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
     //for example "mouse" will turn into camera.inputs.attached.mouse
     public getSimpleName() { return "inputHandler" }
 
-    constructor(@inject(TYPES.Camera) camera: BABYLON.FreeCamera, @inject(TYPES.GameScene) gameScene: GameScene, @inject(TYPES.EntityRegister) EntityRegister: EntityRegister) {
+    constructor(@inject(CLIENT_TYPES.Camera) camera: BABYLON.FreeCamera, @inject(CLIENT_TYPES.GameScene) gameScene: GameScene, @inject(CLIENT_TYPES.EntityRegister) EntityRegister: EntityRegister) {
         this.camera = camera
         this._scene = gameScene
         this._EntityRegister = EntityRegister
@@ -58,7 +58,7 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
         if (!(this as any)._onKeyDown) {
             // element.tabIndex = 1;
             this._onKeyDown = function (evt) {
-                console.log(evt)
+                // console.log(evt)
                 if (_this.keysLeft.indexOf(evt.keyCode) !== -1 || _this.keysRight.indexOf(evt.keyCode) !== -1 || _this.keysUp.indexOf(evt.keyCode) !== -1 || _this.keysDown.indexOf(evt.keyCode) !== -1) {
                     var index = _this._keys.indexOf(evt.keyCode)
                     if (index === -1) {
@@ -124,28 +124,28 @@ export class CameraInput implements BABYLON.ICameraInput<BABYLON.FreeCamera> {
 
         for(var index = 0 ;index < _this._mouse.length; index++){
             var mouseEvent: MouseEvent = _this._mouse[index]
-            console.log(mouseEvent)
+            // console.log(mouseEvent)
             if (_this.Selected == undefined || !_this.Selected.captureMouse(mouseEvent,_this._scene)) {
                 var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-                if (pickResult.hit) {
-                    var meshID = pickResult.pickedMesh.id
-                    var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
+                // if (pickResult.hit) {
+                //     var meshID = pickResult.pickedMesh.id
+                //     var entity = this._EntityRegister.getByEntityID(parseInt(pickResult.pickedMesh.name))
                     
-                    if((<IHasMesh>entity).getMesh){
-                        scene._highlight.addMesh(entity.mesh,new BABYLON.Color3(0,0,255))
-                    }
+                //     if((<IHasMesh>entity).getMesh){
+                //         scene._highlight.addMesh(entity.mesh,new BABYLON.Color3(0,0,255))
+                //     }
 
-                    if((<IHasInstancedMesh>entity).getInstancedMesh){
+                //     if((<IHasInstancedMesh>entity).getInstancedMesh){
                         
-                    }
-                }
+                //     }
+                // }
             };
         }
         _this._mouse = new Array<MouseEvent>()
 
         for (var index = 0; index < this._keys.length; index++) {
             var keyCode = this._keys[index];
-            if (keyCode == KEYMAP.ESCAPE.valueOf()) {
+            if (keyCode == KEYMAP.Q.valueOf()) {
                 _this.Selected = undefined
             }
             if (_this.Selected != undefined) {

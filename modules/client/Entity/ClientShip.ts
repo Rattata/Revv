@@ -3,13 +3,14 @@ import { myContainer } from "../inversify.config";
 import { IInputContext } from "../Input/IInputContext";
 import {EntityRegister} from "../../core/EntityRegister"
 
-import {IHasMesh, ShipMeshFactory, IRenderTerrain} from "../Drawable"
+import {IHasMesh, ShipMeshFactory} from "../Drawable"
 import { Hex } from "../../core/Terrain";
-import { TYPES } from "../../core/types";
+import { CLIENT_TYPES } from "../clienttypes";
 import { GameScene } from "../Scenes/GameScene";
 import { Entity, IMovable } from "../../core/Entity";
 import { MoveAction } from "../../core/Actions";
 import { MeshFactory } from "../Mesh";
+import { MoveActionHandler } from "Input/InputHandler/MoveActionHandler";
 
 export class ClientShip extends Entity implements IInputContext, IHasMesh, IMovable {
 
@@ -22,11 +23,12 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
     public gameScene : GameScene
     
     private entityRegister: EntityRegister
+    private moveActionHandler : MoveActionHandler
 
     constructor(X?:number, Y?:number) {
         super();
-        this.gameScene = myContainer.get<GameScene>(TYPES.GameScene);
-        this.entityRegister = myContainer.get<EntityRegister>(TYPES.EntityRegister);
+        this.gameScene = myContainer.get<GameScene>(CLIENT_TYPES.GameScene);
+        this.entityRegister = myContainer.get<EntityRegister>(CLIENT_TYPES.EntityRegister);
         this.entityRegister.add(X == undefined ? 0 : X, Y == undefined ? 0 : Y, this)
         this.mesh = new ShipMeshFactory().shipMesh(this.gameScene, this.getEntityID().toString())
         var positions = MeshFactory.HexPosition_to_screenPosition(X == undefined ? 0 : X, Y == undefined ? 0 : Y)
@@ -69,6 +71,7 @@ export class ClientShip extends Entity implements IInputContext, IHasMesh, IMova
     }
 
     captureMouse(mouseEvent: MouseEvent, scene:GameScene): boolean {
+        // return this.moveActionHandler.handleMouse(mouseEvent, scene);
         return false
     }
 

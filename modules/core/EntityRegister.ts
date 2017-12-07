@@ -1,5 +1,6 @@
+import "reflect-metadata";
 import { Entity } from "./Entity"
-import { injectable } from "inversify"
+import { injectable, inject } from "inversify"
 import { TYPES } from "./types";
 
 @injectable()
